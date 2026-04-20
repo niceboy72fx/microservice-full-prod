@@ -1,0 +1,12 @@
+name: trading-kibana
+namespace: elastic
+version: 8.13.4
+count: 1
+elasticsearchRef: trading-es
+resources:
+  requests:
+    memory: 512Mi
+    cpu: 250m
+  limits:
+    memory: 800Mi
+    cpu: 500m

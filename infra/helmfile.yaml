@@ -1,0 +1,156 @@
+repositories:
+  - name: ingress-nginx
+    url: https://kubernetes.github.io/ingress-nginx
+  - name: jetstack
+    url: https://charts.jetstack.io
+  - name: elastic
+    url: https://helm.elastic.co
+  - name: prometheus-community
+    url: https://prometheus-community.github.io/helm-charts
+  - name: minio
+    url: https://charts.min.io
+  - name: gitlab
+    url: https://charts.gitlab.io
+  - name: rancher-stable
+    url: https://releases.rancher.com/server-charts/stable
+
+releases:
+  - name: cert-manager
+    namespace: infra
+    createNamespace: true
+    chart: jetstack/cert-manager
+    version: v1.14.4
+    wait: true
+    values:
+      - ./helm/cert-manager/values.yaml
+    set:
+      - name: installCRDs
+        value: "true"
+
+  - name: ingress-nginx
+    namespace: infra
+    createNamespace: true
+    chart: ingress-nginx/ingress-nginx
+    version: 4.10.0
+    wait: true
+    needs:
+      - infra/cert-manager
+    values:
+      - ./helm/ingress-nginx/values.yaml
+
+  - name: minio
+    namespace: infra
+    createNamespace: true
+    chart: minio/minio
+    version: 5.2.0
+    wait: true
+    timeout: 900
+    needs:
+      - infra/ingress-nginx
+    values:
+      - ./helm/minio/values.yaml
+      - rootUser: {{ requiredEnv "MINIO_ROOT_USER" | quote }}
+        rootPassword: {{ requiredEnv "MINIO_ROOT_PASSWORD" | quote }}
+
+  - name: rancher
+    namespace: cattle-system
+    createNamespace: true
+    chart: rancher-stable/rancher
+    version: 2.13.1
+    wait: true
+    timeout: 1200
+    needs:
+      - infra/cert-manager
+      - infra/ingress-nginx
+    values:
+      - ./helm/rancher/values.yaml
+      - bootstrapPassword: {{ requiredEnv "RANCHER_BOOTSTRAP_PASSWORD" | quote }}
+
+  - name: eck-operator
+    namespace: elastic
+    createNamespace: true
+    chart: elastic/eck-operator
+    version: 2.12.1
+    wait: true
+    values:
+      - managedNamespaces:
+          - elastic
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 200m
+            memory: 256Mi
+        webhook:
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 100m
+              memory: 128Mi
+        config:
+          validate-storage-class: true
+
+  - name: elasticsearch
+    namespace: elastic
+    createNamespace: true
+    chart: ./helm/elasticsearch
+    wait: true
+    disableValidation: true
+    needs:
+      - elastic/eck-operator
+
+  - name: kibana
+    namespace: elastic
+    createNamespace: true
+    chart: ./helm/kibana
+    wait: true
+    disableValidation: true
+    needs:
+      - elastic/elasticsearch
+    hooks:
+      - events: ["postsync"]
+        showlogs: true
+        command: kubectl
+        args:
+          - apply
+          - -f
+          - ./manifests/kibana-ingress.yaml
+
+  - name: kube-prometheus-stack
+    namespace: monitoring
+    createNamespace: true
+    chart: prometheus-community/kube-prometheus-stack
+    version: 58.5.3
+    wait: true
+    timeout: 1200
+    disableValidation: true
+    needs:
+      - infra/ingress-nginx
+    values:
+      - ./helm/prometheus-stack/values.yaml
+      - grafana:
+          adminPassword: {{ requiredEnv "GRAFANA_PASSWORD" | quote }}
+
+  - name: gitlab
+    namespace: gitlab
+    createNamespace: true
+    chart: gitlab/gitlab
+    version: 7.11.2
+    wait: false
+    timeout: 600
+    needs:
+      - infra/minio
+      - infra/ingress-nginx
+      - infra/cert-manager
+    values:
+      - ./helm/gitlab/values.yaml
+    hooks:
+      - events: ["presync"]
+        showlogs: true
+        command: bash
+        args:
+          - -ec
+          - envsubst < ./manifests/gitlab-secrets.yaml | kubectl apply -f -

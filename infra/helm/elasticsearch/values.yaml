@@ -1,0 +1,14 @@
+name: trading-es
+namespace: elastic
+version: 8.13.4
+count: 1
+storageClassName: standard-rwo
+storageSize: 30Gi
+javaOpts: -Xms1200m -Xmx1200m
+resources:
+  requests:
+    memory: 1500Mi
+    cpu: 500m
+  limits:
+    memory: 2400Mi
+    cpu: 1000m

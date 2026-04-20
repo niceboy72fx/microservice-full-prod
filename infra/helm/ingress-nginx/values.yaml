@@ -1,0 +1,35 @@
+controller:
+  kind: Deployment
+  replicaCount: 1
+  hostPort:
+    enabled: true
+  service:
+    type: ClusterIP
+  nodeSelector:
+    node-role.kubernetes.io/control-plane: ""
+  tolerations:
+    - key: node-role.kubernetes.io/control-plane
+      operator: Exists
+      effect: NoSchedule
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 250m
+      memory: 256Mi
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: false
+  admissionWebhooks:
+    patch:
+      resources:
+        requests:
+          cpu: 25m
+          memory: 32Mi
+        limits:
+          cpu: 50m
+          memory: 64Mi
+defaultBackend:
+  enabled: false

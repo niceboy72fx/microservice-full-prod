@@ -1,0 +1,238 @@
+global:
+  hosts:
+    domain: trading.local
+    https: false
+  ingress:
+    configureCertmanager: false
+    class: nginx
+  edition: ce
+  time_zone: Asia/Ho_Chi_Minh
+  initialRootPassword:
+    secret: gitlab-root-password
+    key: password
+  object_store:
+    enabled: true
+    connection:
+      secret: gitlab-minio-secret
+      key: connection
+  minio:
+    enabled: false
+  appConfig:
+    artifacts:
+      enabled: true
+      bucket: gitlab-artifacts
+      connection:
+        secret: gitlab-minio-secret
+        key: connection
+    backups:
+      bucket: gitlab-backups
+      tmpBucket: gitlab-backups
+    lfs:
+      enabled: true
+      bucket: gitlab-artifacts
+      connection:
+        secret: gitlab-minio-secret
+        key: connection
+    packages:
+      enabled: true
+      bucket: gitlab-artifacts
+      connection:
+        secret: gitlab-minio-secret
+        key: connection
+    uploads:
+      enabled: true
+      bucket: gitlab-artifacts
+      connection:
+        secret: gitlab-minio-secret
+        key: connection
+
+gitlab-kas:
+  enabled: false
+
+gitlab-pages:
+  enabled: false
+
+spamcheck:
+  enabled: false
+
+praefect:
+  enabled: false
+
+gitlab-zoekt:
+  enabled: false
+
+mailroom:
+  enabled: false
+
+ai-gateway:
+  enabled: false
+
+gitlab:
+  webservice:
+    replicaCount: 1
+    resources:
+      requests:
+        memory: 400Mi
+        cpu: 200m
+      limits:
+        memory: 700Mi
+        cpu: 500m
+    nodeSelector:
+      role: infra
+  sidekiq:
+    replicaCount: 1
+    resources:
+      requests:
+        memory: 200Mi
+        cpu: 100m
+      limits:
+        memory: 300Mi
+        cpu: 250m
+    nodeSelector:
+      role: infra
+  gitaly:
+    persistence:
+      enabled: true
+      storageClass: standard-rwo
+      size: 20Gi
+    resources:
+      requests:
+        memory: 100Mi
+        cpu: 100m
+      limits:
+        memory: 200Mi
+        cpu: 200m
+    nodeSelector:
+      role: infra
+  gitlab-shell:
+    resources:
+      requests:
+        memory: 32Mi
+        cpu: 50m
+      limits:
+        memory: 64Mi
+        cpu: 100m
+    nodeSelector:
+      role: infra
+  toolbox:
+    backups:
+      objectStorage:
+        backend: s3
+        config:
+          secret: gitlab-minio-secret
+          key: connection
+    resources:
+      requests:
+        memory: 64Mi
+        cpu: 50m
+      limits:
+        memory: 128Mi
+        cpu: 100m
+    nodeSelector:
+      role: infra
+  migrations:
+    resources:
+      requests:
+        memory: 128Mi
+        cpu: 100m
+      limits:
+        memory: 256Mi
+        cpu: 200m
+    nodeSelector:
+      role: infra
+
+registry:
+  enabled: true
+  storage:
+    secret: gitlab-registry-storage
+    key: config
+  resources:
+    requests:
+      memory: 64Mi
+      cpu: 50m
+    limits:
+      memory: 128Mi
+      cpu: 100m
+  nodeSelector:
+    role: infra
+
+postgresql:
+  install: true
+  image:
+    repository: bitnamilegacy/postgresql
+    tag: 14.8.0
+  metrics:
+    image:
+      repository: bitnamilegacy/postgres-exporter
+      tag: 0.12.0-debian-11-r86
+  primary:
+    persistence:
+      enabled: true
+      storageClass: standard-rwo
+      size: 8Gi
+    resources:
+      requests:
+        memory: 128Mi
+        cpu: 100m
+      limits:
+        memory: 256Mi
+        cpu: 250m
+    nodeSelector:
+      role: infra
+
+redis:
+  install: true
+  image:
+    repository: bitnamilegacy/redis
+    tag: 6.2.7-debian-11-r11
+  metrics:
+    image:
+      repository: bitnamilegacy/redis-exporter
+      tag: 1.43.0-debian-11-r4
+  master:
+    persistence:
+      enabled: true
+      storageClass: standard-rwo
+      size: 4Gi
+    resources:
+      requests:
+        memory: 64Mi
+        cpu: 50m
+      limits:
+        memory: 128Mi
+        cpu: 100m
+    nodeSelector:
+      role: infra
+
+nginx-ingress:
+  enabled: false
+
+certmanager:
+  install: false
+
+prometheus:
+  install: false
+
+gitlab-runner:
+  install: true
+  resources:
+    requests:
+      memory: 64Mi
+      cpu: 50m
+    limits:
+      memory: 128Mi
+      cpu: 100m
+  runners:
+    locked: false
+    tags: trading-kind
+
+gitlab-exporter:
+  resources:
+    requests:
+      memory: 64Mi
+      cpu: 50m
+    limits:
+      memory: 128Mi
+      cpu: 100m
+  nodeSelector:
+    role: infra

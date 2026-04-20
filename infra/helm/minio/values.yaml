@@ -1,0 +1,74 @@
+mode: standalone
+
+resources:
+  requests:
+    memory: 512Mi
+    cpu: 250m
+  limits:
+    memory: 800Mi
+    cpu: 500m
+
+persistence:
+  enabled: true
+  storageClass: standard-rwo
+  size: 20Gi
+
+ingress:
+  enabled: true
+  ingressClassName: nginx
+  path: /
+  hosts:
+    - minio.trading.local
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: "0"
+
+consoleIngress:
+  enabled: true
+  ingressClassName: nginx
+  path: /
+  hosts:
+    - minio-console.trading.local
+
+environment:
+  MINIO_BROWSER: "on"
+
+buckets:
+  - name: gitlab-artifacts
+    policy: none
+    purge: false
+  - name: gitlab-registry
+    policy: none
+    purge: false
+  - name: gitlab-backups
+    policy: none
+    purge: false
+  - name: reports-pdf
+    policy: none
+    purge: false
+  - name: es-snapshots
+    policy: none
+    purge: false
+
+rootUser: ""
+rootPassword: ""
+
+metrics:
+  serviceMonitor:
+    enabled: false
+
+livenessProbe:
+  enabled: true
+  initialDelaySeconds: 5
+  periodSeconds: 20
+  timeoutSeconds: 5
+  failureThreshold: 5
+
+readinessProbe:
+  enabled: true
+  initialDelaySeconds: 5
+  periodSeconds: 20
+  timeoutSeconds: 5
+  failureThreshold: 5
+
+nodeSelector:
+  role: infra

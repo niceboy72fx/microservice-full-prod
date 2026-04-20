@@ -1,0 +1,21 @@
+hostname: rancher.trading.local
+replicas: 1
+bootstrapPassword: ""
+
+ingress:
+  ingressClassName: nginx
+  tls:
+    source: none
+
+resources:
+  requests:
+    memory: 512Mi
+    cpu: 250m
+  limits:
+    memory: 900Mi
+    cpu: 500m
+
+antiAffinity: preferred
+
+nodeSelector:
+  role: infra

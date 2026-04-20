@@ -1,0 +1,44 @@
+apiVersion: elasticsearch.k8s.elastic.co/v1
+kind: Elasticsearch
+metadata:
+  name: {{ .Values.name }}
+  namespace: {{ .Values.namespace }}
+spec:
+  version: {{ .Values.version }}
+  nodeSets:
+    - name: default
+      count: {{ .Values.count }}
+      config:
+        node.store.allow_mmap: false
+        xpack.security.enabled: true
+      podTemplate:
+        spec:
+          nodeSelector:
+            role: infra
+          initContainers:
+            - name: sysctl
+              securityContext:
+                privileged: true
+              command: ["sh", "-c", "sysctl -w vm.max_map_count=262144"]
+          containers:
+            - name: elasticsearch
+              env:
+                - name: ES_JAVA_OPTS
+                  value: {{ .Values.javaOpts | quote }}
+              resources:
+                requests:
+                  memory: {{ .Values.resources.requests.memory }}
+                  cpu: {{ .Values.resources.requests.cpu }}
+                limits:
+                  memory: {{ .Values.resources.limits.memory }}
+                  cpu: {{ .Values.resources.limits.cpu }}
+      volumeClaimTemplates:
+        - metadata:
+            name: elasticsearch-data
+          spec:
+            accessModes:
+              - ReadWriteOnce
+            storageClassName: {{ .Values.storageClassName }}
+            resources:
+              requests:
+                storage: {{ .Values.storageSize }}
