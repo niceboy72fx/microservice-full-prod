@@ -1,0 +1,3 @@
+rootProject.name = 'risk-service'
+
+includeBuild '../common-service'

@@ -1,0 +1,54 @@
+plugins {
+    id 'java'
+    id 'io.quarkus' version '3.15.1'
+}
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
+dependencies {
+    implementation enforcedPlatform("io.quarkus.platform:quarkus-bom:3.15.1")
+    
+    // REST (JAX-RS)
+    implementation 'io.quarkus:quarkus-resteasy-reactive'
+    implementation 'io.quarkus:quarkus-smallrye-graphql'
+    implementation 'io.quarkus:quarkus-grpc'
+    implementation 'io.quarkus:quarkus-messaging-kafka'
+    implementation 'io.quarkus:quarkus-logging-json'
+    
+    implementation 'com.example.common:common-service:0.0.1-SNAPSHOT'
+    implementation 'io.quarkus:quarkus-resteasy-reactive-jackson'
+    
+    // Hibernate ORM with Panache
+    implementation 'io.quarkus:quarkus-hibernate-orm-panache'
+    
+    // Oracle JDBC
+    implementation 'io.quarkus:quarkus-jdbc-oracle'
+    
+    // MongoDB with Panache
+    implementation 'io.quarkus:quarkus-mongodb-panache'
+    
+    // Redis
+    implementation 'io.quarkus:quarkus-redis-client'
+    
+    // Kafka
+    implementation 'io.quarkus:quarkus-smallrye-kafka'
+
+    // Testing
+    testImplementation 'io.quarkus:quarkus-junit5'
+    testImplementation 'io.rest-assured:rest-assured'
+}
+
+group = 'com.acme'
+version = '1.0.0-SNAPSHOT'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
+
+test {
+    useJUnitPlatform()
+}

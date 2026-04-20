@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: krakend-gateway
+  namespace: __NAMESPACE__
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: krakend-gateway
+  template:
+    metadata:
+      labels:
+        app: krakend-gateway
+    spec:
+      containers:
+        - name: krakend-gateway
+          image: __IMAGE__
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - configMapRef:
+              name: krakend-gateway-config
+          readinessProbe:
+            httpGet:
+              path: /__health
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /__health
+              port: 8080
+            initialDelaySeconds: 15
+            periodSeconds: 20

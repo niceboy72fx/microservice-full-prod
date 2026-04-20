@@ -30,6 +30,8 @@ dependencies {
     implementation "io.grpc:grpc-protobuf:${grpcVersion}"
     implementation "io.grpc:grpc-stub:${grpcVersion}"
 
+    implementation 'com.example.common:common-service:0.0.1-SNAPSHOT'
+
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 

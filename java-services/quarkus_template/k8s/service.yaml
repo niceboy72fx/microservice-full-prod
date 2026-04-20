@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: quarkus-template-service
+  namespace: __NAMESPACE__
+  labels:
+    app: quarkus-template-service
+spec:
+  ports:
+    - port: 8080
+      targetPort: 8080
+      name: http
+  selector:
+    app: quarkus-template-service
+  type: ClusterIP

@@ -1,0 +1,8 @@
+/node-services/node_modules
+/java-services/common-service/bin
+/java-services/common-service/.gradle
+/java-services/project_template/bin
+/java-services/project_template/.gradle
+node_modules/
+dist/
+build/

@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: node-alert
+  namespace: __NAMESPACE__
+  labels:
+    app: node-alert
+spec:
+  ports:
+    - port: 3000
+      targetPort: 3000
+      name: http
+  selector:
+    app: node-alert
+  type: ClusterIP

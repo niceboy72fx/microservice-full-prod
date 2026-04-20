@@ -1,0 +1,3 @@
+rootProject.name = 'ledger-service'
+
+includeBuild '../common-service'

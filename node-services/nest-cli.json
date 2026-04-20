@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json.schemastore.org/nest-cli",
+  "collection": "@nestjs/schematics",
+  "sourceRoot": "apps/project-template/src",
+  "compilerOptions": {
+    "deleteOutDir": true,
+    "webpack": true,
+    "tsConfigPath": "apps/project-template/tsconfig.app.json"
+  },
+  "monorepo": true,
+  "root": "apps/project-template",
+  "projects": {
+    "alert": {
+      "type": "application",
+      "root": "apps/alert",
+      "entryFile": "main",
+      "sourceRoot": "apps/alert/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/alert/tsconfig.app.json"
+      }
+    },
+    "market-data": {
+      "type": "application",
+      "root": "apps/market-data",
+      "entryFile": "main",
+      "sourceRoot": "apps/market-data/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/market-data/tsconfig.app.json"
+      }
+    },
+    "notification": {
+      "type": "application",
+      "root": "apps/notification",
+      "entryFile": "main",
+      "sourceRoot": "apps/notification/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/notification/tsconfig.app.json"
+      }
+    },
+    "price-feed-adapter": {
+      "type": "application",
+      "root": "apps/price-feed-adapter",
+      "entryFile": "main",
+      "sourceRoot": "apps/price-feed-adapter/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/price-feed-adapter/tsconfig.app.json"
+      }
+    },
+    "project-template": {
+      "type": "application",
+      "root": "apps/project-template",
+      "entryFile": "main",
+      "sourceRoot": "apps/project-template/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/project-template/tsconfig.app.json"
+      }
+    },
+    "search": {
+      "type": "application",
+      "root": "apps/search",
+      "entryFile": "main",
+      "sourceRoot": "apps/search/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/search/tsconfig.app.json"
+      }
+    },
+    "shared-package": {
+      "type": "library",
+      "root": "libs/shared-package",
+      "entryFile": "index",
+      "sourceRoot": "libs/shared-package/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/shared-package/tsconfig.lib.json"
+      }
+    }
+  }
+}

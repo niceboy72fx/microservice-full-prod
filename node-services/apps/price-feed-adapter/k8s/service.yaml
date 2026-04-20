@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: node-price-feed-adapter
+  namespace: __NAMESPACE__
+  labels:
+    app: node-price-feed-adapter
+spec:
+  ports:
+    - port: 3000
+      targetPort: 3000
+      name: http
+  selector:
+    app: node-price-feed-adapter
+  type: ClusterIP
