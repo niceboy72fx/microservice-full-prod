@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package price_feed_adapter;
+
+service PriceFeedAdapterService {
+  rpc FetchPrice (FetchPriceRequest) returns (FetchPriceResponse) {}
+}
+
+message FetchPriceRequest {
+  string symbol = 1;
+}
+
+message FetchPriceResponse {
+  string symbol = 1;
+  double currentPrice = 2;
+}

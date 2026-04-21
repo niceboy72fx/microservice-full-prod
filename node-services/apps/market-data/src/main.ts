@@ -2,18 +2,22 @@ import { NestFactory } from "@nestjs/core";
 import { MarketDataModule } from "./market-data.module";
 import { Transport, MicroserviceOptions } from "@nestjs/microservices";
 import { elasticsearchLogger } from "@app/shared-package/elasticsearch-logger";
+import { ConfigService } from "@nestjs/config";
+import { join } from "path";
 
 async function bootstrap() {
   const app = await NestFactory.create(MarketDataModule, {
     logger: elasticsearchLogger,
   });
 
+  const configService = app.get(ConfigService);
+
   // Connect Kafka Microservice
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.KAFKA,
     options: {
       client: {
-        brokers: [process.env.KAFKA_BROKER || "localhost:9092"],
+        brokers: [configService.get<string>("KAFKA_BROKER") || "localhost:9092"],
       },
       consumer: {
         groupId: "market-data-consumer",
@@ -25,12 +29,12 @@ async function bootstrap() {
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.GRPC,
     options: {
-      package: "market-data",
-      protoPath: "path/to/market-data.proto",
+      package: "market_data",
+      protoPath: join(process.cwd(), "libs/shared-package/src/proto/market-data.proto"),
     },
   });
 
   await app.startAllMicroservices();
-  await app.listen(process.env.PORT ?? 3000);
+  await app.listen(configService.get<number>("PORT") ?? 3000);
 }
 bootstrap();

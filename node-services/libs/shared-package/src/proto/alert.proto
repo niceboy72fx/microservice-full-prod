@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package alert;
+
+service AlertService {
+  rpc CreateAlert (CreateAlertRequest) returns (CreateAlertResponse) {}
+}
+
+message CreateAlertRequest {
+  string message = 1;
+}
+
+message CreateAlertResponse {
+  bool success = 1;
+}

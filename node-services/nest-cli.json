@@ -5,7 +5,8 @@
   "compilerOptions": {
     "deleteOutDir": true,
     "webpack": true,
-    "tsConfigPath": "apps/project-template/tsconfig.app.json"
+    "tsConfigPath": "apps/project-template/tsconfig.app.json",
+    "assets": [{ "include": "**/*.proto", "outDir": "dist", "watchAssets": true }]
   },
   "monorepo": true,
   "root": "apps/project-template",

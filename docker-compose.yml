@@ -1,0 +1,150 @@
+services:
+  # Infrastructure Services
+  oracle:
+    image: gvenzl/oracle-free:latest
+    environment:
+      - ORACLE_PASSWORD=oracle
+    ports:
+      - "1521:1521"
+    networks:
+      - trading-net
+
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    networks:
+      - trading-net
+
+  kafka:
+    image: apache/kafka:latest
+    environment:
+      - KAFKA_NODE_ID=1
+      - KAFKA_PROCESS_ROLES=broker,controller
+      - KAFKA_LISTENERS=PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
+      - KAFKA_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      - KAFKA_CONTROLLER_QUORUM_VOTERS=1@kafka:9093
+      - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
+      - KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR=1
+      - KAFKA_TRANSACTION_STATE_LOG_MIN_ISR=1
+    ports:
+      - "9092:9092"
+    networks:
+      - trading-net
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.12.2
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+    ports:
+      - "9200:9200"
+    networks:
+      - trading-net
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.12.2
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticsearch
+    networks:
+      - trading-net
+
+  krakend-gateway:
+    build:
+      context: ./krakend-gateway
+    ports:
+      - "8080:8080"
+    networks:
+      - trading-net
+
+  # Java Services
+  account-service:
+    build: ./java-services/account-service
+    networks:
+      - trading-net
+
+  risk-service:
+    build: ./java-services/risk-service
+    networks:
+      - trading-net
+
+  settlement-service:
+    build: ./java-services/settlement-service
+    networks:
+      - trading-net
+
+  ledger-service:
+    build: ./java-services/ledger-service
+    networks:
+      - trading-net
+
+  order-service:
+    build: ./java-services/order-service
+    networks:
+      - trading-net
+
+  reporting-service:
+    build: ./java-services/reporting-service
+    networks:
+      - trading-net
+
+  user-service:
+    build: ./java-services/user-service
+    networks:
+      - trading-net
+
+  auth-service:
+    build: ./java-services/auth-service
+    networks:
+      - trading-net
+
+  quarkus-template:
+    build: ./java-services/quarkus_template
+    networks:
+      - trading-net
+
+  java-project-template:
+    build: ./java-services/project_template
+    networks:
+      - trading-net
+
+  # Node Services
+  price-feed-adapter:
+    build: ./node-services/apps/price-feed-adapter
+    networks:
+      - trading-net
+
+  market-data:
+    build: ./node-services/apps/market-data
+    networks:
+      - trading-net
+
+  notification:
+    build: ./node-services/apps/notification
+    networks:
+      - trading-net
+
+  alert:
+    build: ./node-services/apps/alert
+    networks:
+      - trading-net
+
+  search:
+    build: ./node-services/apps/search
+    networks:
+      - trading-net
+
+  node-project-template:
+    build: ./node-services/apps/project-template
+    networks:
+      - trading-net
+
+networks:
+  trading-net:
+    driver: bridge

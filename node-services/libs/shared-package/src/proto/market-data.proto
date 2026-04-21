@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package market_data;
+
+service MarketDataService {
+  rpc GetMarketData (GetMarketDataRequest) returns (GetMarketDataResponse) {}
+}
+
+message GetMarketDataRequest {
+  string symbol = 1;
+}
+
+message GetMarketDataResponse {
+  string symbol = 1;
+  double price = 2;
+}

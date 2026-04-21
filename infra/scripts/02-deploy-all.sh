@@ -43,13 +43,17 @@ echo "  127.0.0.1 grafana.trading.local prometheus.trading.local"
 echo "  127.0.0.1 kibana.trading.local gitlab.trading.local"
 echo "  127.0.0.1 rancher.trading.local"
 
-helmfile --file "$REPO_ROOT/infra/helmfile.yaml" apply
+helmfile --file "$REPO_ROOT/infra/helmfile.yaml" apply ${HELMFILE_ARGS:-}
 
 kubectl apply -f "$REPO_ROOT/infra/manifests/external-nodeports.yaml"
 
-echo "Waiting for GitLab... (up to 10min)"
-kubectl wait --for=condition=Ready pod \
-  -l app=webservice -n gitlab --timeout=600s
+if [[ "${HELMFILE_ARGS:-}" != *"--selector name!=gitlab"* ]]; then
+  echo "Waiting for GitLab... (up to 10min)"
+  kubectl wait --for=condition=Ready pod \
+    -l app=webservice -n gitlab --timeout=600s
+else
+  echo "Skipping GitLab deployment wait condition..."
+fi
 
 echo ""
 echo "=== DONE ==="
