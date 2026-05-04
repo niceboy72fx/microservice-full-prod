@@ -1,0 +1,10 @@
+{
+  "userService": {
+    "baseUrl": "http://user-service",
+    "graphql": "/graphql"
+  },
+  "orderService": {
+    "baseUrl": "http://order-service",
+    "graphql": "/graphql"
+  }
+}

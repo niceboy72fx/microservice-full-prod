@@ -6,3 +6,13 @@ metadata:
 data:
   # Add your environment variables here
   NODE_ENV: "production"
+  ORACLE_CONNECT_STRING: "localhost:1521/XEPDB1"
+  ORACLE_USER: "app"
+  ORACLE_PASSWORD: "app"
+  CLICKHOUSE_URL: "http://localhost:8123"
+  CLICKHOUSE_USER: "default"
+  CLICKHOUSE_PASSWORD: ""
+  REDIS_HOST: "redis"
+  REDIS_PORT: "6379"
+  KAFKA_BROKER: "kafka:9092"
+  GRPC_PORT: "50051"

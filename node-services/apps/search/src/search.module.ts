@@ -4,7 +4,7 @@ import { SearchController } from "./search.controller";
 import { SearchService } from "./search.service";
 import { GraphQLModule } from "@nestjs/graphql";
 import { ApolloDriver, ApolloDriverConfig } from "@nestjs/apollo";
-import { envValidationSchema } from "@app/shared-package";
+import { envValidationSchema } from "@app/validation";
 
 @Module({
   imports: [

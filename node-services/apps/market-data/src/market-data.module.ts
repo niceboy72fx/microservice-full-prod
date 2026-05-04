@@ -4,7 +4,7 @@ import { MarketDataController } from "./market-data.controller";
 import { MarketDataService } from "./market-data.service";
 import { GraphQLModule } from "@nestjs/graphql";
 import { ApolloDriver, ApolloDriverConfig } from "@nestjs/apollo";
-import { envValidationSchema } from "@app/shared-package";
+import { envValidationSchema } from "@app/validation";
 
 @Module({
   imports: [

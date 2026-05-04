@@ -43,7 +43,10 @@
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
     "winston": "^3.19.0",
-    "winston-elasticsearch": "^0.19.0"
+    "winston-elasticsearch": "^0.19.0",
+    "oracledb": "^6.9.0",
+    "@clickhouse/client": "^1.12.1",
+    "ioredis": "^5.4.1"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",
@@ -91,7 +94,19 @@
       "<rootDir>/libs/"
     ],
     "moduleNameMapper": {
-      "^@app/shared-package(|/.*)$": "<rootDir>/libs/shared-package/src/$1"
+      "^@app/core(|/.*)$": "<rootDir>/libs/core/src/$1",
+      "^@app/web(|/.*)$": "<rootDir>/libs/web/src/$1",
+      "^@app/security(|/.*)$": "<rootDir>/libs/security/src/$1",
+      "^@app/validation(|/.*)$": "<rootDir>/libs/validation/src/$1",
+      "^@app/kafka(|/.*)$": "<rootDir>/libs/kafka/src/$1",
+      "^@app/graphql(|/.*)$": "<rootDir>/libs/graphql/src/$1",
+      "^@app/grpc(|/.*)$": "<rootDir>/libs/grpc/src/$1",
+      "^@app/redis(|/.*)$": "<rootDir>/libs/redis/src/$1",
+      "^@app/contract(|/.*)$": "<rootDir>/libs/contract/src/$1",
+      "^@app/audit(|/.*)$": "<rootDir>/libs/audit/src/$1",
+      "^@app/observability(|/.*)$": "<rootDir>/libs/observability/src/$1",
+      "^@app/idempotency(|/.*)$": "<rootDir>/libs/idempotency/src/$1",
+      "^@app/lock(|/.*)$": "<rootDir>/libs/lock/src/$1"
     }
   }
 }

@@ -4,7 +4,7 @@ import { AlertController } from "./alert.controller";
 import { AlertService } from "./alert.service";
 import { GraphQLModule } from "@nestjs/graphql";
 import { ApolloDriver, ApolloDriverConfig } from "@nestjs/apollo";
-import { envValidationSchema } from "@app/shared-package";
+import { envValidationSchema } from "@app/validation";
 
 @Module({
   imports: [

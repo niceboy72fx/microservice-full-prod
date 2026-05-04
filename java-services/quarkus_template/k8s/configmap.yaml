@@ -1,8 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: quarkus-template-service-config
-  namespace: __NAMESPACE__
-data:
-  # Add your environment variables here
-  QUARKUS_PROFILE: "prod"

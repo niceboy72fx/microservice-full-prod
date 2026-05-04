@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { ProjectTemplateController } from './project-template.controller';
 import { ProjectTemplateService } from './project-template.service';
-import { envValidationSchema } from '@app/shared-package';
+import { envValidationSchema } from '@app/validation';
 
 @Module({
   imports: [

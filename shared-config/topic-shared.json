@@ -1,0 +1,21 @@
+{
+  "user": {
+    "created": "user.created.v1",
+    "updated": "user.updated.v1"
+  },
+  "order": {
+    "created": "order.created.v1",
+    "updated": "order.updated.v1"
+  },
+  "notification": {
+    "created": "notification.created.v1",
+    "delivered": "notification.delivered.v1"
+  },
+  "market": {
+    "tick": "market.tick.v1",
+    "snapshot": "market.snapshot.v1"
+  },
+  "audit": {
+    "event": "audit.event.v1"
+  }
+}

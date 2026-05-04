@@ -1,0 +1,17 @@
+{
+  "elasticsearch": {
+    "node": "http://localhost:9200",
+    "username": "",
+    "password": "",
+    "requestTimeoutMs": 30000,
+    "maxRetries": 3,
+    "sniffOnStart": false
+  },
+  "kibana": {
+    "url": "http://localhost:5601"
+  },
+  "logging": {
+    "indexPrefix": "microservices-logs",
+    "level": "info"
+  }
+}

@@ -1,0 +1,3 @@
+rootProject.name = 'java-services'
+
+include 'common-service', 'user-service'

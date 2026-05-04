@@ -18,7 +18,7 @@ dependencies {
     implementation 'io.quarkus:quarkus-messaging-kafka'
     implementation 'io.quarkus:quarkus-logging-json'
     
-    implementation 'com.example.common:common-service:0.0.1-SNAPSHOT'
+    implementation 'com.commonservice.common:common-service:0.0.1-SNAPSHOT'
     implementation 'io.quarkus:quarkus-resteasy-reactive-jackson'
     
     // Hibernate ORM with Panache
@@ -26,6 +26,7 @@ dependencies {
     
     // Oracle JDBC
     implementation 'io.quarkus:quarkus-jdbc-oracle'
+    implementation 'com.clickhouse:clickhouse-jdbc:0.7.2'
     
     // MongoDB with Panache
     implementation 'io.quarkus:quarkus-mongodb-panache'

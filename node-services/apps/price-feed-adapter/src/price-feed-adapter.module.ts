@@ -4,7 +4,7 @@ import { PriceFeedAdapterController } from "./price-feed-adapter.controller";
 import { PriceFeedAdapterService } from "./price-feed-adapter.service";
 import { GraphQLModule } from "@nestjs/graphql";
 import { ApolloDriver, ApolloDriverConfig } from "@nestjs/apollo";
-import { envValidationSchema } from "@app/shared-package";
+import { envValidationSchema } from "@app/validation";
 
 @Module({
   imports: [

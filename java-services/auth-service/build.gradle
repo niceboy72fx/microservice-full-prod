@@ -24,15 +24,17 @@ repositories {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'org.springframework.kafka:spring-kafka'
-    implementation "io.grpc:grpc-netty-shaded:${grpcVersion}"
-    implementation "io.grpc:grpc-protobuf:${grpcVersion}"
-    implementation "io.grpc:grpc-stub:${grpcVersion}"
+    implementation "io.grpc:grpc-netty-shaded:4{grpcVersion}"
+    implementation "io.grpc:grpc-protobuf:4{grpcVersion}"
+    implementation "io.grpc:grpc-stub:4{grpcVersion}"
 
-    implementation 'com.example.common:common-service:0.0.1-SNAPSHOT'
+    runtimeOnly 'com.oracle.database.jdbc:ojdbc11:23.4.0.24.05'
+    implementation 'com.clickhouse:clickhouse-jdbc:0.7.2'
+    implementation 'com.commonservice.common:common-service:0.0.1-SNAPSHOT'
 
-    
     implementation "net.devh:grpc-server-spring-boot-starter:3.1.0.RELEASE"
     implementation "org.springframework.boot:spring-boot-starter-graphql"
     implementation "net.logstash.logback:logstash-logback-encoder:7.4"

@@ -1,7 +1,7 @@
 import { NestFactory } from "@nestjs/core";
 import { AlertModule } from "./alert.module";
 import { Transport, MicroserviceOptions } from "@nestjs/microservices";
-import { elasticsearchLogger } from "@app/shared-package/elasticsearch-logger";
+import { elasticsearchLogger } from "@app/observability";
 import { ConfigService } from "@nestjs/config";
 import { join } from "path";
 
@@ -30,7 +30,7 @@ async function bootstrap() {
     transport: Transport.GRPC,
     options: {
       package: "alert",
-      protoPath: join(process.cwd(), "libs/shared-package/src/proto/alert.proto"),
+      protoPath: join(process.cwd(), "libs/grpc/src/proto/alert.proto"),
     },
   });
 

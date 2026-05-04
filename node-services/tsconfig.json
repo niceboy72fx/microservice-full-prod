@@ -22,11 +22,83 @@
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "@app/shared-package": [
-        "libs/shared-package/src"
+      "@app/core": [
+        "libs/core/src"
       ],
-      "@app/shared-package/*": [
-        "libs/shared-package/src/*"
+      "@app/core/*": [
+        "libs/core/src/*"
+      ],
+      "@app/web": [
+        "libs/web/src"
+      ],
+      "@app/web/*": [
+        "libs/web/src/*"
+      ],
+      "@app/security": [
+        "libs/security/src"
+      ],
+      "@app/security/*": [
+        "libs/security/src/*"
+      ],
+      "@app/validation": [
+        "libs/validation/src"
+      ],
+      "@app/validation/*": [
+        "libs/validation/src/*"
+      ],
+      "@app/kafka": [
+        "libs/kafka/src"
+      ],
+      "@app/kafka/*": [
+        "libs/kafka/src/*"
+      ],
+      "@app/graphql": [
+        "libs/graphql/src"
+      ],
+      "@app/graphql/*": [
+        "libs/graphql/src/*"
+      ],
+      "@app/grpc": [
+        "libs/grpc/src"
+      ],
+      "@app/grpc/*": [
+        "libs/grpc/src/*"
+      ],
+      "@app/redis": [
+        "libs/redis/src"
+      ],
+      "@app/redis/*": [
+        "libs/redis/src/*"
+      ],
+      "@app/contract": [
+        "libs/contract/src"
+      ],
+      "@app/contract/*": [
+        "libs/contract/src/*"
+      ],
+      "@app/audit": [
+        "libs/audit/src"
+      ],
+      "@app/audit/*": [
+        "libs/audit/src/*"
+      ],
+      "@app/observability": [
+        "libs/observability/src"
+      ],
+      "@app/observability/*": [
+        "libs/observability/src/*"
+      ],
+      "@app/idempotency": [
+        "libs/idempotency/src"
+      ],
+      "@app/idempotency/*": [
+        "libs/idempotency/src/*"
+      ],
+      "@app/lock": [
+        "libs/lock/src"
+      ],
+      "@app/lock/*": [
+        "libs/lock/src/*"
       ]
     }
   }

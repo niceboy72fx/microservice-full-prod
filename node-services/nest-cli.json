@@ -6,7 +6,13 @@
     "deleteOutDir": true,
     "webpack": true,
     "tsConfigPath": "apps/project-template/tsconfig.app.json",
-    "assets": [{ "include": "**/*.proto", "outDir": "dist", "watchAssets": true }]
+    "assets": [
+      {
+        "include": "**/*.proto",
+        "outDir": "dist",
+        "watchAssets": true
+      }
+    ]
   },
   "monorepo": true,
   "root": "apps/project-template",
@@ -65,13 +71,121 @@
         "tsConfigPath": "apps/search/tsconfig.app.json"
       }
     },
-    "shared-package": {
+    "core": {
       "type": "library",
-      "root": "libs/shared-package",
+      "root": "libs/core",
       "entryFile": "index",
-      "sourceRoot": "libs/shared-package/src",
+      "sourceRoot": "libs/core/src",
       "compilerOptions": {
-        "tsConfigPath": "libs/shared-package/tsconfig.lib.json"
+        "tsConfigPath": "libs/core/tsconfig.lib.json"
+      }
+    },
+    "web": {
+      "type": "library",
+      "root": "libs/web",
+      "entryFile": "index",
+      "sourceRoot": "libs/web/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/web/tsconfig.lib.json"
+      }
+    },
+    "security": {
+      "type": "library",
+      "root": "libs/security",
+      "entryFile": "index",
+      "sourceRoot": "libs/security/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/security/tsconfig.lib.json"
+      }
+    },
+    "validation": {
+      "type": "library",
+      "root": "libs/validation",
+      "entryFile": "index",
+      "sourceRoot": "libs/validation/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/validation/tsconfig.lib.json"
+      }
+    },
+    "kafka": {
+      "type": "library",
+      "root": "libs/kafka",
+      "entryFile": "index",
+      "sourceRoot": "libs/kafka/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/kafka/tsconfig.lib.json"
+      }
+    },
+    "graphql": {
+      "type": "library",
+      "root": "libs/graphql",
+      "entryFile": "index",
+      "sourceRoot": "libs/graphql/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/graphql/tsconfig.lib.json"
+      }
+    },
+    "grpc": {
+      "type": "library",
+      "root": "libs/grpc",
+      "entryFile": "index",
+      "sourceRoot": "libs/grpc/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/grpc/tsconfig.lib.json"
+      }
+    },
+    "redis": {
+      "type": "library",
+      "root": "libs/redis",
+      "entryFile": "index",
+      "sourceRoot": "libs/redis/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/redis/tsconfig.lib.json"
+      }
+    },
+    "contract": {
+      "type": "library",
+      "root": "libs/contract",
+      "entryFile": "index",
+      "sourceRoot": "libs/contract/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/contract/tsconfig.lib.json"
+      }
+    },
+    "audit": {
+      "type": "library",
+      "root": "libs/audit",
+      "entryFile": "index",
+      "sourceRoot": "libs/audit/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/audit/tsconfig.lib.json"
+      }
+    },
+    "observability": {
+      "type": "library",
+      "root": "libs/observability",
+      "entryFile": "index",
+      "sourceRoot": "libs/observability/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/observability/tsconfig.lib.json"
+      }
+    },
+    "idempotency": {
+      "type": "library",
+      "root": "libs/idempotency",
+      "entryFile": "index",
+      "sourceRoot": "libs/idempotency/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/idempotency/tsconfig.lib.json"
+      }
+    },
+    "lock": {
+      "type": "library",
+      "root": "libs/lock",
+      "entryFile": "index",
+      "sourceRoot": "libs/lock/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/lock/tsconfig.lib.json"
       }
     }
   }
