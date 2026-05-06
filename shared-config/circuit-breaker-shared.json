@@ -1,0 +1,22 @@
+{
+  "defaults": {
+    "failureThreshold": 5,
+    "minimumCalls": 10,
+    "halfOpenMaxCalls": 3,
+    "openDuration": "30s"
+  },
+  "instances": {
+    "smtp-send": {
+      "failureThreshold": 3,
+      "minimumCalls": 5,
+      "halfOpenMaxCalls": 2,
+      "openDuration": "60s"
+    },
+    "kafka-publish": {
+      "failureThreshold": 5,
+      "minimumCalls": 10,
+      "halfOpenMaxCalls": 3,
+      "openDuration": "20s"
+    }
+  }
+}

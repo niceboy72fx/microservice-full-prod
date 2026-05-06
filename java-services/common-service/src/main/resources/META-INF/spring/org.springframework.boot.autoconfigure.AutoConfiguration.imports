@@ -1,0 +1,2 @@
+com.commonservice.common.cache.CacheAutoConfiguration
+com.commonservice.common.circuitbreaker.CircuitBreakerAutoConfiguration

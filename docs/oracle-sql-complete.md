@@ -1,5 +1,161 @@
 # 📘 Oracle SQL & PL/SQL — Tài liệu tham khảo toàn diện
 
+## toàn cảnh cấu trúc cơ bản của database oracle
+
+``` javascript
+Instance (RAM + process)
+        ↓
+CDB (database mẹ)
+        ↓
+PDB (database con / tenant)
+        ↓
+Schema (user/domain)
+        ↓
+Object (table, index…)
+        ↓
+Tablespace
+        ↓
+Datafile (file thật trên disk)
+```
+
+1. INSTANCE (compute layer)
+Instance = RAM + background processes
+Gồm:
+SGA (RAM)
+buffer cache → cache data
+shared pool → cache SQL, execution plan
+Process
+DBWR → ghi data ra disk
+LGWR → ghi log
+SMON → recovery
+PMON → cleanup session
+
+👉 Vai trò:
+
+= runtime engine xử lý query
+
+👉 Quan trọng:
+
+restart instance ≠ mất data
+vì data nằm dưới (datafile)
+
+CDB (Container DB)
+CDB = database mẹ
+Bên trong có:
+root container
+nhiều PDB
+
+👉 Vai trò:
+
+= quản lý nhiều database con
+
+👉 Think:
+
+= giống Docker host
+
+3. PDB (Pluggable DB)
+PDB = database con (tenant)
+Mỗi PDB có:
+schema riêng
+tablespace riêng
+datafile riêng
+
+👉 Vai trò:
+
+= isolate từng app / environment
+
+👉 Ví dụ bạn:
+
+USER_DB_POB = 1 database cho ERP
+
+4. SCHEMA (user)
+Schema = user owns objects
+Nó chứa:
+table
+index
+view
+procedure
+
+👉 Vai trò:
+
+= boundary của domain/module
+
+👉 Bạn đang có:
+
+auth_db → auth domain
+
+5. TABLE (object)
+Table = data structure
+Gồm:
+column (schema)
+row (data)
+
+👉 Vai trò:
+
+= lưu business data
+
+👉 mapping:
+
+app_user → user entity
+role → role entity
+
+6. INDEX
+Index = cấu trúc tăng tốc query
+loại:
+B-tree (default)
+bitmap (analytics)
+
+👉 Vai trò:
+
+= tăng tốc SELECT
+= trade-off: chậm INSERT/UPDATE
+💾 7. TABLESPACE
+Tablespace = logical storage container
+chứa:
+segment (table/index)
+map tới datafile
+
+👉 Vai trò:
+
+= quản lý nơi lưu data
+
+👉 ví dụ:
+
+auth_data → chứa toàn bộ table của auth_db
+
+
+
+
+# Cấu trúc cơ bản của oracleDB 
+``` javascript
+CDB: FREE  // database cha 
+└── PDB: USER_DB_POB // database con
+    ├── tablespace: auth_data  // table space noi luu tru data
+    ├── tablespace: product_data 
+    ├── tablespace: inventory_data
+    │
+    ├── schema: auth_db // noi luu tru 
+    │   ├── app_user
+    │   ├── role
+    │   └── permission
+    │
+    ├── schema: product_db
+    │ 
+    └── schema: inventory_db
+```
+CDB = container cha
+PDB = database con cho app/tenant/module
+Schema/User = namespace chứa object
+Table = object thuộc schema
+Tablespace = nơi lưu data của object
+Datafile = file thật trên disk
+
+có thể hiểu như này
+
+1 PDB cho một app/system lớn
+nhiều schema để tách module/domain
+nhiều tablespace để tách vùng lưu trữ/quản trị/performance/backup
+
 > Schema mẫu dùng xuyên suốt tài liệu
 
 ```sql

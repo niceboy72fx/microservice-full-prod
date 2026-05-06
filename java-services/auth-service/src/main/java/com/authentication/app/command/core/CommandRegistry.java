@@ -1,6 +1,6 @@
 package com.authentication.app.command.core;
 
-import com.authentication.app.common.exception.BusinessException;
+import com.commonservice.common.exception.BusinessException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.stereotype.Component;

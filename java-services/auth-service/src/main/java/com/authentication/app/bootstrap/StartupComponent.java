@@ -1,8 +1,9 @@
 package com.authentication.app.bootstrap;
 
 import com.authentication.app.integration.external.ExternalClient;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.commonservice.common.observability.Logger;
+import com.commonservice.common.observability.LoggerFactory;
+import java.util.Map;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
@@ -13,7 +14,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class StartupComponent {
 
-    private static final Logger log = LoggerFactory.getLogger(StartupComponent.class);
+    private static final Logger log = LoggerFactory.create("auth-service");
 
     private final ObjectProvider<KafkaTemplate<String, String>> kafkaTemplateProvider;
     private final ObjectProvider<StringRedisTemplate> redisTemplateProvider;
@@ -31,8 +32,10 @@ public class StartupComponent {
 
     @EventListener(ApplicationReadyEvent.class)
     public void onApplicationReady() {
-        log.info("Application started. Kafka template available: {}", kafkaTemplateProvider.getIfAvailable() != null);
-        log.info("Application started. Redis template available: {}", redisTemplateProvider.getIfAvailable() != null);
-        log.info("Application started. gRPC client status: {}", externalClient.healthCheck());
+        log.info("Application started", Map.of(
+                "kafkaTemplateAvailable", kafkaTemplateProvider.getIfAvailable() != null,
+                "redisTemplateAvailable", redisTemplateProvider.getIfAvailable() != null,
+                "grpcClientStatus", externalClient.healthCheck()
+        ));
     }
 }

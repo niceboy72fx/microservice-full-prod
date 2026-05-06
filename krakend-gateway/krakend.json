@@ -2,58 +2,205 @@
   "version": 3,
   "name": "Microservice API Gateway",
   "port": 8080,
-  "timeout": "3s",
-  "cache_ttl": "300s",
+  "timeout": "10s",
+  "cache_ttl": "0s",
   "output_encoding": "json",
+  "extra_config": {
+    "router": {
+      "return_error_msg": true
+    }
+  },
   "endpoints": [
     {
-      "endpoint": "/api/v1/commands",
-      "method": "GET",
-      "output_encoding": "json",
+      "endpoint": "/api/auth/{path}",
+      "method": "POST",
       "backend": [
         {
-          "url_pattern": "/actuator/health",
+          "host": ["http://auth-service:8080"],
+          "url_pattern": "/api/auth/{path}",
           "encoding": "json",
-          "sd": "static",
-          "method": "GET",
-          "host": [
-            "http://generic-command-service:8080"
-          ],
-          "disable_host_sanitize": false
+          "method": "POST"
         }
       ]
     },
     {
-      "endpoint": "/api/v1/orders",
-      "method": "GET",
-      "output_encoding": "json",
+      "endpoint": "/api/v1/auth/{path}",
+      "method": "POST",
       "backend": [
         {
-          "url_pattern": "/orders",
+          "host": ["http://auth-service:8080"],
+          "url_pattern": "/api/v1/auth/{path}",
           "encoding": "json",
-          "sd": "static",
-          "method": "GET",
-          "host": [
-            "http://quarkus-template-service:8080"
-          ],
-          "disable_host_sanitize": false
+          "method": "POST"
         }
       ]
     },
     {
-      "endpoint": "/api/v1/node",
-      "method": "GET",
-      "output_encoding": "json",
+      "endpoint": "/api/accounts",
+      "method": "POST",
       "backend": [
         {
-          "url_pattern": "/",
+          "host": ["http://account-service:8080"],
+          "url_pattern": "/api/accounts",
           "encoding": "json",
-          "sd": "static",
-          "method": "GET",
-          "host": [
-            "http://node-project-template:3000"
-          ],
-          "disable_host_sanitize": false
+          "method": "POST"
+        }
+      ]
+    },
+    {
+      "endpoint": "/api/accounts",
+      "method": "GET",
+      "backend": [
+        {
+          "host": ["http://account-service:8080"],
+          "url_pattern": "/api/accounts",
+          "encoding": "json",
+          "method": "GET"
+        }
+      ]
+    },
+    {
+      "endpoint": "/api/accounts/{path}",
+      "method": "GET",
+      "backend": [
+        {
+          "host": ["http://account-service:8080"],
+          "url_pattern": "/api/accounts/{path}",
+          "encoding": "json",
+          "method": "GET"
+        }
+      ]
+    },
+    {
+      "endpoint": "/api/accounts/{path}",
+      "method": "DELETE",
+      "backend": [
+        {
+          "host": ["http://account-service:8080"],
+          "url_pattern": "/api/accounts/{path}",
+          "encoding": "json",
+          "method": "DELETE"
+        }
+      ]
+    },
+    {
+      "endpoint": "/api/accounts/{path}",
+      "method": "POST",
+      "backend": [
+        {
+          "host": ["http://account-service:8080"],
+          "url_pattern": "/api/accounts/{path}",
+          "encoding": "json",
+          "method": "POST"
+        }
+      ]
+    },
+    {
+      "endpoint": "/api/v1/notifications/stream",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "backend": [
+        {
+          "host": ["http://notification-service:8080"],
+          "url_pattern": "/api/v1/notifications/stream",
+          "encoding": "no-op",
+          "method": "GET"
+        }
+      ]
+    },
+    {
+      "endpoint": "/api/auth/samples",
+      "method": "POST",
+      "backend": [
+        {
+          "host": ["http://auth-service:8080"],
+          "url_pattern": "/api/samples",
+          "encoding": "json",
+          "method": "POST"
+        }
+      ]
+    },
+    {
+      "endpoint": "/api/account/samples",
+      "method": "POST",
+      "backend": [
+        {
+          "host": ["http://account-service:8080"],
+          "url_pattern": "/api/samples",
+          "encoding": "json",
+          "method": "POST"
+        }
+      ]
+    },
+    {
+      "endpoint": "/api/notification/samples",
+      "method": "POST",
+      "backend": [
+        {
+          "host": ["http://notification-service:8080"],
+          "url_pattern": "/api/samples",
+          "encoding": "json",
+          "method": "POST"
+        }
+      ]
+    },
+    {
+      "endpoint": "/api/ledger/samples",
+      "method": "POST",
+      "backend": [
+        {
+          "host": ["http://ledger-service:8080"],
+          "url_pattern": "/api/samples",
+          "encoding": "json",
+          "method": "POST"
+        }
+      ]
+    },
+    {
+      "endpoint": "/api/reporting/samples",
+      "method": "POST",
+      "backend": [
+        {
+          "host": ["http://reporting-service:8080"],
+          "url_pattern": "/api/samples",
+          "encoding": "json",
+          "method": "POST"
+        }
+      ]
+    },
+    {
+      "endpoint": "/api/risk/samples",
+      "method": "POST",
+      "backend": [
+        {
+          "host": ["http://risk-service:8080"],
+          "url_pattern": "/api/samples",
+          "encoding": "json",
+          "method": "POST"
+        }
+      ]
+    },
+    {
+      "endpoint": "/api/settlement/samples",
+      "method": "POST",
+      "backend": [
+        {
+          "host": ["http://settlement-service:8080"],
+          "url_pattern": "/api/samples",
+          "encoding": "json",
+          "method": "POST"
+        }
+      ]
+    },
+    {
+      "endpoint": "/api/payment/samples",
+      "method": "POST",
+      "backend": [
+        {
+          "host": ["http://payment-service:8080"],
+          "url_pattern": "/api/samples",
+          "encoding": "json",
+          "method": "POST"
         }
       ]
     }

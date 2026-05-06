@@ -1,0 +1,37 @@
+CREATE USER account_db IDENTIFIED BY "123456";
+
+GRANT CONNECT, RESOURCE TO account_db;
+
+ALTER USER account_db QUOTA UNLIMITED ON USERS;
+
+ALTER SESSION SET CURRENT_SCHEMA = account_db;
+
+CREATE TABLE user_profile (
+  id VARCHAR2(32) DEFAULT RAWTOHEX(SYS_GUID()) PRIMARY KEY,
+  user_id VARCHAR2(32),
+  status VARCHAR2(20),
+  gender VARCHAR2(20),
+  create_at TIMESTAMP,
+  update_at TIMESTAMP
+);
+
+CREATE TABLE ekyc (
+  id VARCHAR2(32) DEFAULT RAWTOHEX(SYS_GUID()) PRIMARY KEY,
+  user_id VARCHAR2(32),
+  status VARCHAR2(20),
+  selfie_url VARCHAR2(500),
+  create_at TIMESTAMP,
+  update_at TIMESTAMP
+);
+
+CREATE TABLE bank_account (
+  id VARCHAR2(32) DEFAULT RAWTOHEX(SYS_GUID()) PRIMARY KEY,
+  user_id VARCHAR2(32),
+  bank_name VARCHAR2(255),
+  account_number VARCHAR2(255),
+  account_name VARCHAR2(255),
+  create_at TIMESTAMP,
+  update_at TIMESTAMP
+);
+
+COMMIT;

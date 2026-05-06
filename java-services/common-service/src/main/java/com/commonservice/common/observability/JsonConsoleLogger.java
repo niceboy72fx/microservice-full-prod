@@ -1,6 +1,6 @@
 package com.commonservice.common.observability;
 
-import com.commonservice.common.serialization.JsonUtils;
+import com.commonservice.common.json.JsonUtils;
 
 import java.time.Instant;
 import java.util.LinkedHashMap;
