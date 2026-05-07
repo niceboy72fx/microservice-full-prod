@@ -1,0 +1,717 @@
+// ============================================================
+// STOCK TRADING PLATFORM — DATABASE SCHEMA
+// Generated from Business Domain Analysis
+// Paste this into https://dbdiagram.io/
+// ============================================================
+
+// ════════════════════════════════
+// DOMAIN 1: AUTH — Xác thực & Phân quyền
+// ════════════════════════════════
+
+Table users {
+  id          bigserial   [pk, increment]
+  email       varchar(255) [unique, not null]
+  password_hash varchar(255) [note: 'null if OAuth only']
+  status      varchar(20)  [not null, note: 'PENDING | ACTIVE | LOCKED | SUSPENDED']
+  email_verified_at timestamp
+  created_at  timestamp   [default: `now()`]
+  updated_at  timestamp
+}
+
+Table oauth_providers {
+  id          bigserial   [pk]
+  user_id     bigint      [not null, ref: > users.id]
+  provider    varchar(50) [not null, note: 'google | facebook']
+  provider_uid varchar(255) [not null]
+  created_at  timestamp   [default: `now()`]
+
+  indexes {
+    (provider, provider_uid) [unique]
+  }
+}
+
+Table refresh_tokens {
+  id          bigserial   [pk]
+  user_id     bigint      [not null, ref: > users.id]
+  token_hash  varchar(255) [unique, not null]
+  device_info varchar(255)
+  ip_address  varchar(45)
+  expires_at  timestamp   [not null]
+  revoked_at  timestamp
+  created_at  timestamp   [default: `now()`]
+}
+
+Table token_blacklist {
+  id          bigserial   [pk]
+  jti         varchar(255) [unique, not null, note: 'JWT ID']
+  expires_at  timestamp   [not null]
+  created_at  timestamp   [default: `now()`]
+}
+
+Table password_reset_tokens {
+  id          bigserial   [pk]
+  user_id     bigint      [not null, ref: > users.id]
+  token_hash  varchar(255) [unique, not null]
+  used_at     timestamp
+  expires_at  timestamp   [not null]
+  created_at  timestamp   [default: `now()`]
+}
+
+Table two_factor_auth {
+  id          bigserial   [pk]
+  user_id     bigint      [unique, not null, ref: > users.id]
+  secret      varchar(255) [not null, note: 'TOTP secret, encrypted']
+  enabled     boolean     [default: false]
+  enabled_at  timestamp
+  created_at  timestamp   [default: `now()`]
+}
+
+Table backup_codes {
+  id          bigserial   [pk]
+  user_id     bigint      [not null, ref: > users.id]
+  code_hash   varchar(255) [not null]
+  used_at     timestamp
+  created_at  timestamp   [default: `now()`]
+}
+
+Table login_attempts {
+  id          bigserial   [pk]
+  user_id     bigint      [ref: > users.id, note: 'null if user not found']
+  email       varchar(255)
+  ip_address  varchar(45)
+  success     boolean     [not null]
+  attempted_at timestamp  [default: `now()`]
+}
+
+Table trusted_devices {
+  id          bigserial   [pk]
+  user_id     bigint      [not null, ref: > users.id]
+  device_fingerprint varchar(255) [not null]
+  device_name varchar(255)
+  ip_address  varchar(45)
+  last_seen_at timestamp
+  created_at  timestamp   [default: `now()`]
+}
+
+// ════════════════════════════════
+// RBAC
+// ════════════════════════════════
+
+Table roles {
+  id          serial      [pk]
+  name        varchar(50) [unique, not null, note: 'Trader | PremiumTrader | Analyst | ComplianceOfficer | Admin | SuperAdmin']
+  description text
+}
+
+Table permissions {
+  id          serial      [pk]
+  resource    varchar(100) [not null, note: 'order | account | market_data | ...']
+  action      varchar(50)  [not null, note: 'create | read | update | cancel']
+  scope       varchar(20)  [not null, note: 'own | all']
+}
+
+Table role_permissions {
+  role_id       int   [not null, ref: > roles.id]
+  permission_id int   [not null, ref: > permissions.id]
+
+  indexes {
+    (role_id, permission_id) [pk]
+  }
+}
+
+Table user_roles {
+  id          bigserial   [pk]
+  user_id     bigint      [not null, ref: > users.id]
+  role_id     int         [not null, ref: > roles.id]
+  granted_by  bigint      [ref: > users.id]
+  valid_from  timestamp
+  valid_until timestamp
+  created_at  timestamp   [default: `now()`]
+}
+
+// ════════════════════════════════
+// DOMAIN 2: USER PROFILE & KYC
+// ════════════════════════════════
+
+Table user_profiles {
+  id          bigserial   [pk]
+  user_id     bigint      [unique, not null, ref: > users.id]
+  full_name   varchar(255) [not null]
+  date_of_birth date
+  phone       varchar(20)
+  phone_verified_at timestamp
+  address     text
+  avatar_url  varchar(500)
+  created_at  timestamp   [default: `now()`]
+  updated_at  timestamp
+}
+
+Table kyc_submissions {
+  id          bigserial   [pk]
+  user_id     bigint      [not null, ref: > users.id]
+  status      varchar(20)  [not null, note: 'PENDING | APPROVED | REJECTED']
+  doc_type    varchar(50)  [not null, note: 'CMND | CCCD | PASSPORT']
+  doc_number  varchar(50)  [not null]
+  doc_front_url  varchar(500)
+  doc_back_url   varchar(500)
+  selfie_url     varchar(500)
+  submitted_at   timestamp  [default: `now()`]
+  reviewed_by    bigint     [ref: > users.id, note: 'Compliance Officer']
+  reviewed_at    timestamp
+  reject_reason  text
+  attempt_number int        [default: 1]
+}
+
+Table bank_accounts {
+  id          bigserial   [pk]
+  user_id     bigint      [not null, ref: > users.id]
+  bank_name   varchar(100) [not null]
+  account_number varchar(50) [not null]
+  account_name   varchar(255) [not null]
+  verified    boolean     [default: false]
+  verified_at timestamp
+  created_at  timestamp   [default: `now()`]
+
+  indexes {
+    (user_id, account_number) [unique]
+  }
+}
+
+// ════════════════════════════════
+// DOMAIN 3: ACCOUNT & MONEY
+// ════════════════════════════════
+
+Table trading_accounts {
+  id          bigserial   [pk]
+  user_id     bigint      [unique, not null, ref: > users.id]
+  status      varchar(20)  [not null, note: 'ACTIVE | FROZEN | SUSPENDED']
+  kyc_level   varchar(20)  [not null, note: 'NONE | PENDING | VERIFIED | REJECTED']
+  is_margin_enabled boolean [default: false]
+  margin_ratio_pct  decimal(5,2) [note: 'e.g. 200 = 1:2']
+  frozen_at   timestamp
+  frozen_by   bigint      [ref: > users.id]
+  frozen_reason text
+  created_at  timestamp   [default: `now()`]
+}
+
+Table account_balances {
+  id              bigserial   [pk]
+  account_id      bigint      [unique, not null, ref: > trading_accounts.id]
+  cash_total      decimal(20,4) [not null, default: 0]
+  cash_reserved   decimal(20,4) [not null, default: 0, note: 'Reserved for open orders']
+  cash_available  decimal(20,4) [not null, default: 0, note: 'total - reserved - pending_withdrawal']
+  margin_used     decimal(20,4) [not null, default: 0]
+  margin_limit    decimal(20,4) [not null, default: 0]
+  updated_at      timestamp
+}
+
+Table ledger_entries {
+  id          bigserial   [pk]
+  account_id  bigint      [not null, ref: > trading_accounts.id]
+  entry_type  varchar(50)  [not null, note: 'DEPOSIT | WITHDRAWAL | TRADE_BUY | TRADE_SELL | FEE | MARGIN_INTEREST | DIVIDEND | ADJUSTMENT']
+  amount      decimal(20,4) [not null, note: 'positive = credit, negative = debit']
+  balance_after decimal(20,4) [not null]
+  reference_id bigint     [note: 'FK to deposit_requests, orders, etc.']
+  reference_type varchar(50)
+  note        text
+  created_at  timestamp   [default: `now()`]
+}
+
+Table deposit_requests {
+  id          bigserial   [pk]
+  account_id  bigint      [not null, ref: > trading_accounts.id]
+  amount      decimal(20,4) [not null]
+  method      varchar(50)  [not null, note: 'BANK_TRANSFER | CREDIT_CARD | E_WALLET']
+  status      varchar(20)  [not null, note: 'PENDING | COMPLETED | FAILED']
+  bank_ref    varchar(255)
+  confirmed_at timestamp
+  created_at  timestamp   [default: `now()`]
+}
+
+Table withdrawal_requests {
+  id           bigserial   [pk]
+  account_id   bigint      [not null, ref: > trading_accounts.id]
+  bank_account_id bigint   [not null, ref: > bank_accounts.id]
+  amount       decimal(20,4) [not null]
+  fee          decimal(20,4) [not null, default: 0]
+  status       varchar(20)  [not null, note: 'PENDING | PROCESSING | COMPLETED | FAILED']
+  otp_verified boolean     [default: false]
+  processed_at timestamp
+  created_at   timestamp   [default: `now()`]
+}
+
+Table fee_tiers {
+  id          serial      [pk]
+  tier_name   varchar(50) [not null]
+  min_volume  decimal(20,4) [not null]
+  max_volume  decimal(20,4)
+  fee_rate    decimal(8,6) [not null, note: 'e.g. 0.002 = 0.2%']
+  rebate_rate decimal(8,6) [default: 0]
+}
+
+Table margin_interest_charges {
+  id          bigserial   [pk]
+  account_id  bigint      [not null, ref: > trading_accounts.id]
+  margin_used decimal(20,4) [not null]
+  interest_rate decimal(8,6) [not null]
+  amount      decimal(20,4) [not null]
+  charge_date date        [not null]
+  created_at  timestamp   [default: `now()`]
+}
+
+// ════════════════════════════════
+// DOMAIN 4: MARKET DATA
+// ════════════════════════════════
+
+Table symbols {
+  id          serial      [pk]
+  ticker      varchar(20)  [unique, not null]
+  name        varchar(255) [not null]
+  exchange    varchar(50)  [not null, note: 'HOSE | HNX | UPCOM']
+  sector      varchar(100)
+  status      varchar(20)  [not null, note: 'ACTIVE | HALTED | SUSPENDED | DELISTED']
+  reference_price decimal(15,4)
+  price_limit_pct decimal(5,2) [default: 10, note: '±10% circuit breaker band']
+  lot_size    int          [default: 100]
+  total_shares bigint
+  created_at  timestamp   [default: `now()`]
+  updated_at  timestamp
+}
+
+Table market_ticks {
+  id          bigserial   [pk]
+  symbol_id   int         [not null, ref: > symbols.id]
+  bid_price   decimal(15,4)
+  ask_price   decimal(15,4)
+  last_price  decimal(15,4)
+  volume      bigint
+  ticked_at   timestamp   [not null]
+
+  indexes {
+    (symbol_id, ticked_at)
+  }
+}
+
+Table ohlcv_candles {
+  id          bigserial   [pk]
+  symbol_id   int         [not null, ref: > symbols.id]
+  timeframe   varchar(10)  [not null, note: '1m | 5m | 15m | 1h | 4h | 1d | 1w | 1M']
+  open_price  decimal(15,4) [not null]
+  high_price  decimal(15,4) [not null]
+  low_price   decimal(15,4) [not null]
+  close_price decimal(15,4) [not null]
+  volume      bigint       [not null]
+  candle_time timestamp   [not null]
+
+  indexes {
+    (symbol_id, timeframe, candle_time) [unique]
+  }
+}
+
+Table order_book_snapshots {
+  id          bigserial   [pk]
+  symbol_id   int         [not null, ref: > symbols.id]
+  side        varchar(4)   [not null, note: 'BUY | SELL']
+  price       decimal(15,4) [not null]
+  quantity    bigint       [not null]
+  level       int          [not null, note: '1 = best price']
+  snapped_at  timestamp   [not null]
+
+  indexes {
+    (symbol_id, snapped_at)
+  }
+}
+
+Table price_alerts {
+  id          bigserial   [pk]
+  user_id     bigint      [not null, ref: > users.id]
+  symbol_id   int         [not null, ref: > symbols.id]
+  condition   varchar(10)  [not null, note: 'GTE | LTE | CHANGE_PCT']
+  threshold   decimal(15,4) [not null]
+  triggered_at timestamp
+  is_active   boolean     [default: true]
+  created_at  timestamp   [default: `now()`]
+}
+
+Table market_news {
+  id          bigserial   [pk]
+  title       varchar(500) [not null]
+  body        text
+  source_url  varchar(500)
+  published_at timestamp  [not null]
+  created_at  timestamp   [default: `now()`]
+}
+
+Table news_symbol_tags {
+  news_id    bigint [not null, ref: > market_news.id]
+  symbol_id  int    [not null, ref: > symbols.id]
+
+  indexes {
+    (news_id, symbol_id) [pk]
+  }
+}
+
+Table corporate_events {
+  id          bigserial   [pk]
+  symbol_id   int         [not null, ref: > symbols.id]
+  event_type  varchar(50)  [not null, note: 'DIVIDEND | STOCK_SPLIT | RIGHTS_ISSUE | AGM | EARNINGS']
+  event_date  date        [not null]
+  description text
+  adjustment_factor decimal(10,6) [note: 'for splits/merges']
+  created_at  timestamp   [default: `now()`]
+}
+
+Table fundamental_data {
+  id          bigserial   [pk]
+  symbol_id   int         [not null, ref: > symbols.id]
+  period      varchar(10)  [not null, note: 'Q1 | Q2 | Q3 | Q4 | FY']
+  fiscal_year int         [not null]
+  pe_ratio    decimal(10,4)
+  pb_ratio    decimal(10,4)
+  eps         decimal(15,4)
+  revenue     decimal(25,4)
+  net_profit  decimal(25,4)
+  updated_at  timestamp
+
+  indexes {
+    (symbol_id, period, fiscal_year) [unique]
+  }
+}
+
+// ════════════════════════════════
+// DOMAIN 5: ORDER MANAGEMENT
+// ════════════════════════════════
+
+Table orders {
+  id          bigserial   [pk]
+  account_id  bigint      [not null, ref: > trading_accounts.id]
+  symbol_id   int         [not null, ref: > symbols.id]
+  side        varchar(4)   [not null, note: 'BUY | SELL']
+  order_type  varchar(20)  [not null, note: 'MARKET | LIMIT | STOP | STOP_LIMIT']
+  time_in_force varchar(10) [not null, note: 'GTC | IOC | FOK | ATO | ATC']
+  price       decimal(15,4) [note: 'null for MARKET orders']
+  stop_price  decimal(15,4) [note: 'for STOP and STOP_LIMIT']
+  quantity    bigint       [not null]
+  filled_qty  bigint       [not null, default: 0]
+  avg_fill_price decimal(15,4)
+  status      varchar(20)  [not null, note: 'PENDING | OPEN | PARTIAL | FILLED | CANCELLED | REJECTED']
+  reject_reason text
+  cash_reserved decimal(20,4) [note: 'amount locked when order opened']
+  session     varchar(10)  [note: 'REGULAR | ATO | ATC']
+  placed_at   timestamp   [default: `now()`]
+  updated_at  timestamp
+
+  indexes {
+    (account_id, status)
+    (symbol_id, status)
+  }
+}
+
+Table order_fills {
+  id          bigserial   [pk]
+  order_id    bigint      [not null, ref: > orders.id]
+  matched_order_id bigint [ref: > orders.id]
+  fill_price  decimal(15,4) [not null]
+  fill_qty    bigint       [not null]
+  fee_amount  decimal(20,4) [not null]
+  fee_rate    decimal(8,6)
+  filled_at   timestamp   [not null, default: `now()`]
+}
+
+Table order_amendments {
+  id          bigserial   [pk]
+  order_id    bigint      [not null, ref: > orders.id]
+  old_price   decimal(15,4)
+  new_price   decimal(15,4)
+  old_quantity bigint
+  new_quantity bigint
+  amended_at  timestamp   [default: `now()`]
+}
+
+// ════════════════════════════════
+// DOMAIN 6: MATCHING ENGINE
+// ════════════════════════════════
+
+Table trade_records {
+  id          bigserial   [pk]
+  symbol_id   int         [not null, ref: > symbols.id]
+  buy_order_id  bigint    [not null, ref: > orders.id]
+  sell_order_id bigint    [not null, ref: > orders.id]
+  price       decimal(15,4) [not null]
+  quantity    bigint       [not null]
+  session     varchar(10)  [note: 'REGULAR | ATO | ATC']
+  matched_at  timestamp   [not null, default: `now()`]
+
+  indexes {
+    (symbol_id, matched_at)
+  }
+}
+
+Table trading_sessions {
+  id          bigserial   [pk]
+  symbol_id   int         [not null, ref: > symbols.id]
+  session_type varchar(20) [not null, note: 'ATO | REGULAR | ATC | HALT']
+  status      varchar(20)  [not null, note: 'SCHEDULED | OPEN | CLOSED | HALTED']
+  start_at    timestamp
+  end_at      timestamp
+  halt_reason text
+  created_at  timestamp   [default: `now()`]
+}
+
+Table circuit_breaker_logs {
+  id          bigserial   [pk]
+  symbol_id   int         [ref: > symbols.id, note: 'null = market-wide']
+  trigger_type varchar(20) [not null, note: 'AUTO | MANUAL']
+  trigger_reason text
+  price_drop_pct decimal(5,2)
+  triggered_by bigint     [ref: > users.id]
+  halted_at   timestamp   [not null, default: `now()`]
+  resumed_at  timestamp
+}
+
+// ════════════════════════════════
+// DOMAIN 7: SETTLEMENT
+// ════════════════════════════════
+
+Table settlements {
+  id          bigserial   [pk]
+  trade_id    bigint      [not null, ref: > trade_records.id]
+  buyer_account_id  bigint [not null, ref: > trading_accounts.id]
+  seller_account_id bigint [not null, ref: > trading_accounts.id]
+  symbol_id   int         [not null, ref: > symbols.id]
+  quantity    bigint       [not null]
+  price       decimal(15,4) [not null]
+  total_value decimal(20,4) [not null]
+  status      varchar(20)  [not null, note: 'PENDING | DVP_LOCKED | COMPLETED | FAILED']
+  trade_date  date        [not null, note: 'T']
+  settlement_date date    [not null, note: 'T+2']
+  fail_reason text
+  penalty_amount decimal(20,4)
+  settled_at  timestamp
+  created_at  timestamp   [default: `now()`]
+}
+
+Table reconciliation_reports {
+  id          bigserial   [pk]
+  report_date date        [unique, not null]
+  status      varchar(20)  [not null, note: 'MATCHED | DISCREPANCY | PENDING']
+  total_trades int
+  total_value  decimal(25,4)
+  discrepancy_amount decimal(20,4) [default: 0]
+  discrepancy_notes text
+  generated_at timestamp  [default: `now()`]
+  signed_off_by bigint   [ref: > users.id]
+}
+
+// ════════════════════════════════
+// DOMAIN 8: PORTFOLIO
+// ════════════════════════════════
+
+Table holdings {
+  id          bigserial   [pk]
+  account_id  bigint      [not null, ref: > trading_accounts.id]
+  symbol_id   int         [not null, ref: > symbols.id]
+  quantity_total    bigint [not null, default: 0]
+  quantity_available bigint [not null, default: 0, note: 'total - pending settlement T+2']
+  avg_cost_price decimal(15,4) [not null, note: 'weighted average cost']
+  updated_at  timestamp
+
+  indexes {
+    (account_id, symbol_id) [unique]
+  }
+}
+
+Table realized_pnl {
+  id          bigserial   [pk]
+  account_id  bigint      [not null, ref: > trading_accounts.id]
+  symbol_id   int         [not null, ref: > symbols.id]
+  order_fill_id bigint    [not null, ref: > order_fills.id]
+  sell_price  decimal(15,4) [not null]
+  cost_price  decimal(15,4) [not null]
+  quantity    bigint       [not null]
+  pnl_amount  decimal(20,4) [not null]
+  fee_amount  decimal(20,4) [not null]
+  realized_at timestamp   [default: `now()`]
+}
+
+Table portfolio_snapshots {
+  id          bigserial   [pk]
+  account_id  bigint      [not null, ref: > trading_accounts.id]
+  snapshot_date date      [not null]
+  total_equity decimal(20,4) [not null]
+  cash_balance decimal(20,4) [not null]
+  holdings_value decimal(20,4) [not null]
+  daily_return_pct decimal(8,4)
+  created_at  timestamp   [default: `now()`]
+
+  indexes {
+    (account_id, snapshot_date) [unique]
+  }
+}
+
+// ════════════════════════════════
+// DOMAIN 9: RISK MANAGEMENT
+// ════════════════════════════════
+
+Table risk_rules {
+  id          serial      [pk]
+  rule_name   varchar(100) [not null]
+  rule_type   varchar(50)  [not null, note: 'POSITION_LIMIT | ORDER_RATE | DAILY_LOSS | MARGIN_RATIO']
+  scope       varchar(20)  [not null, note: 'GLOBAL | USER | SYMBOL']
+  threshold   decimal(20,4) [not null]
+  action      varchar(50)  [not null, note: 'WARN | REJECT | SUSPEND']
+  is_active   boolean     [default: true]
+}
+
+Table user_risk_overrides {
+  id          bigserial   [pk]
+  user_id     bigint      [not null, ref: > users.id]
+  risk_rule_id int        [not null, ref: > risk_rules.id]
+  override_threshold decimal(20,4)
+  set_by      bigint      [ref: > users.id]
+  created_at  timestamp   [default: `now()`]
+}
+
+Table margin_call_logs {
+  id          bigserial   [pk]
+  account_id  bigint      [not null, ref: > trading_accounts.id]
+  margin_ratio_pct decimal(5,2) [not null]
+  level       int         [not null, note: '1 = warning, 2 = critical, 3 = liquidation']
+  notified_at timestamp  [not null]
+  resolved_at timestamp
+  resolved_by varchar(20) [note: 'MANUAL | AUTO_LIQUIDATION']
+}
+
+Table forced_liquidations {
+  id          bigserial   [pk]
+  account_id  bigint      [not null, ref: > trading_accounts.id]
+  margin_call_id bigint   [ref: > margin_call_logs.id]
+  order_id    bigint      [ref: > orders.id]
+  symbol_id   int         [not null, ref: > symbols.id]
+  quantity    bigint       [not null]
+  triggered_at timestamp  [default: `now()`]
+}
+
+Table anomaly_flags {
+  id          bigserial   [pk]
+  account_id  bigint      [not null, ref: > trading_accounts.id]
+  flag_type   varchar(50)  [not null, note: 'WASH_TRADE | PUMP_DUMP | LAYERING | RATE_ABUSE']
+  description text
+  severity    varchar(20)  [not null, note: 'LOW | MEDIUM | HIGH | CRITICAL']
+  auto_suspended boolean   [default: false]
+  reviewed_by bigint      [ref: > users.id]
+  reviewed_at timestamp
+  created_at  timestamp   [default: `now()`]
+}
+
+// ════════════════════════════════
+// DOMAIN 10: NOTIFICATION
+// ════════════════════════════════
+
+Table notification_preferences {
+  id          bigserial   [pk]
+  user_id     bigint      [unique, not null, ref: > users.id]
+  email_enabled  boolean  [default: true]
+  push_enabled   boolean  [default: true]
+  sms_enabled    boolean  [default: false]
+  updated_at  timestamp
+}
+
+Table notifications {
+  id          bigserial   [pk]
+  user_id     bigint      [not null, ref: > users.id]
+  type        varchar(50)  [not null, note: 'ORDER | ACCOUNT | PRICE_ALERT | RISK | SYSTEM']
+  channel     varchar(20)  [not null, note: 'EMAIL | PUSH | SMS']
+  title       varchar(255) [not null]
+  body        text
+  is_mandatory boolean     [default: false, note: 'cannot be turned off']
+  read_at     timestamp
+  sent_at     timestamp
+  created_at  timestamp   [default: `now()`]
+
+  indexes {
+    (user_id, created_at)
+  }
+}
+
+// ════════════════════════════════
+// DOMAIN 11: REPORTING & TAX
+// ════════════════════════════════
+
+Table account_statements {
+  id          bigserial   [pk]
+  account_id  bigint      [not null, ref: > trading_accounts.id]
+  period_type varchar(10)  [not null, note: 'MONTHLY | QUARTERLY | YEARLY']
+  period_start date        [not null]
+  period_end  date        [not null]
+  file_url    varchar(500)
+  generated_at timestamp  [default: `now()`]
+
+  indexes {
+    (account_id, period_start) [unique]
+  }
+}
+
+Table tax_summaries {
+  id          bigserial   [pk]
+  account_id  bigint      [not null, ref: > trading_accounts.id]
+  fiscal_year int         [not null]
+  total_sell_value   decimal(25,4) [not null]
+  tax_amount         decimal(20,4) [not null, note: '0.1% of total sell value']
+  dividend_received  decimal(20,4) [default: 0]
+  dividend_tax       decimal(20,4) [default: 0]
+  file_url    varchar(500)
+  generated_at timestamp  [default: `now()`]
+
+  indexes {
+    (account_id, fiscal_year) [unique]
+  }
+}
+
+// ════════════════════════════════
+// DOMAIN 12: ADMIN & OPERATIONS
+// ════════════════════════════════
+
+Table audit_logs {
+  id          bigserial   [pk]
+  actor_id    bigint      [ref: > users.id]
+  actor_role  varchar(50)
+  action      varchar(100) [not null]
+  resource    varchar(100) [not null]
+  resource_id bigint
+  old_value   jsonb
+  new_value   jsonb
+  ip_address  varchar(45)
+  reason      text
+  created_at  timestamp   [not null, default: `now()`]
+
+  indexes {
+    (actor_id, created_at)
+    (resource, resource_id)
+  }
+}
+
+Table manual_balance_adjustments {
+  id          bigserial   [pk]
+  account_id  bigint      [not null, ref: > trading_accounts.id]
+  amount      decimal(20,4) [not null]
+  reason      text        [not null]
+  ticket_ref  varchar(100) [not null]
+  requested_by bigint     [not null, ref: > users.id]
+  approved_by  bigint     [ref: > users.id, note: '4-eyes: second approver']
+  approved_at  timestamp
+  status      varchar(20)  [not null, note: 'PENDING | APPROVED | REJECTED']
+  created_at  timestamp   [default: `now()`]
+}
+
+Table operational_metrics {
+  id          bigserial   [pk]
+  metric_name varchar(100) [not null]
+  value       decimal(20,4) [not null]
+  unit        varchar(50)
+  recorded_at timestamp   [not null, default: `now()`]
+
+  indexes {
+    (metric_name, recorded_at)
+  }
+}
