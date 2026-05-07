@@ -1,4 +1,4 @@
-package com.ledger.app.integration.external;
+package com.ledger.app.integration;
 
 import io.grpc.ManagedChannel;
 import org.springframework.stereotype.Component;

@@ -1,12 +1,12 @@
-package com.risk.app.command.sample.handler;
+package com.risk.app.command;
 
-import com.risk.app.command.core.CommandHandler;
-import com.risk.app.command.core.CommandRegistry;
+import com.risk.app.command.CommandHandler;
+import com.risk.app.command.CommandRegistry;
 import com.risk.app.command.sample.command.SampleCommand;
-import com.risk.app.domain.model.SampleModel;
-import com.risk.app.domain.service.SampleDomainService;
+import com.risk.app.bean.SampleModel;
+import com.risk.app.service.SampleDomainService;
 import com.risk.app.dto.response.SampleResponse;
-import com.risk.app.repository.SampleRepository;
+import com.risk.app.dao.SampleRepository;
 import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Component;
 

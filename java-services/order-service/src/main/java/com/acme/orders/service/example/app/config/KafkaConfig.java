@@ -1,4 +1,4 @@
-package com.example.app.config;
+package com.acme.orders.service.example.app.config;
 
 import java.util.List;
 

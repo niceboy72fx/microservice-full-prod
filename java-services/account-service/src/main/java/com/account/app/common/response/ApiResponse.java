@@ -1,4 +1,4 @@
-package com.account.app.common.response;
+package com.account.app.common;
 
 public class ApiResponse<T> {
 

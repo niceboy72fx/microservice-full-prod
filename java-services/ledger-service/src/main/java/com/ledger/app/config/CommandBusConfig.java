@@ -1,8 +1,8 @@
 package com.ledger.app.config;
 
-import com.ledger.app.command.core.CommandBus;
-import com.ledger.app.command.core.CommandRegistry;
-import com.ledger.app.command.core.SimpleCommandBus;
+import com.ledger.app.command.CommandBus;
+import com.ledger.app.command.CommandRegistry;
+import com.ledger.app.command.SimpleCommandBus;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

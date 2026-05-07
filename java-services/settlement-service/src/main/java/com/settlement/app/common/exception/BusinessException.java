@@ -1,4 +1,4 @@
-package com.settlement.app.common.exception;
+package com.settlement.app.common;
 
 public class BusinessException extends RuntimeException {
 

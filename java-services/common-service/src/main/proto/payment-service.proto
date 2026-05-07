@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package common.payment.v1;
+
+option java_multiple_files = true;
+option java_package = "com.commonservice.common.grpc.payment.v1";
+
+service PaymentService {
+  rpc GetPaymentStatus (GetPaymentStatusRequest) returns (GetPaymentStatusResponse);
+}
+
+message GetPaymentStatusRequest {
+  string payment_id = 1;
+}
+
+message GetPaymentStatusResponse {
+  string payment_id = 1;
+  string status = 2;
+  string message = 3;
+}

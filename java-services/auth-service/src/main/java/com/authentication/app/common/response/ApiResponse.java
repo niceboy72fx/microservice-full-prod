@@ -1,4 +1,4 @@
-package com.authentication.app.common.response;
+package com.authentication.app.common;
 
 public class ApiResponse<T> {
 

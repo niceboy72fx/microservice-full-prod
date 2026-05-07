@@ -1,6 +1,6 @@
 package com.reporting.app.controller;
 
-import com.reporting.app.command.core.CommandBus;
+import com.reporting.app.command.CommandBus;
 import com.reporting.app.command.sample.command.SampleCommand;
 import com.reporting.app.command.sample.mapper.SampleCommandMapper;
 import com.reporting.app.common.response.ApiResponse;

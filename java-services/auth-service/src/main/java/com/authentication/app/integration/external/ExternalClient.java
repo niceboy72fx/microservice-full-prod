@@ -1,4 +1,4 @@
-package com.authentication.app.integration.external;
+package com.authentication.app.integration;
 
 import io.grpc.ManagedChannel;
 import org.springframework.stereotype.Component;

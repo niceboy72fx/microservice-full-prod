@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package common.risk.v1;
+
+option java_multiple_files = true;
+option java_package = "com.commonservice.common.grpc.risk.v1";
+
+service RiskService {
+  rpc EvaluatePayment (RiskCheckRequest) returns (RiskCheckResponse);
+}
+
+message RiskCheckRequest {
+  string payment_id = 1;
+  string account_id = 2;
+  string amount = 3;
+  string currency = 4;
+  string channel = 5;
+  string ip_address = 6;
+}
+
+message RiskCheckResponse {
+  string payment_id = 1;
+  string decision = 2;
+  string reason = 3;
+}

@@ -1,4 +1,4 @@
-package com.risk.app.common.response;
+package com.risk.app.common;
 
 public class ApiResponse<T> {
 

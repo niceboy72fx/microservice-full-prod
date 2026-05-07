@@ -1,4 +1,4 @@
-package com.account.app.command.sample.mapper;
+package com.account.app.command;
 
 import com.account.app.command.sample.command.SampleCommand;
 import com.account.app.dto.request.SampleRequest;

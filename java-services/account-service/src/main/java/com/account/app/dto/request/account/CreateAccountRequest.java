@@ -1,4 +1,4 @@
-package com.account.app.dto.request.account;
+package com.account.app.dto;
 
 public class CreateAccountRequest {
 

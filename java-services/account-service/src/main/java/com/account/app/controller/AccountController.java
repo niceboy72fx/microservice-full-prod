@@ -6,7 +6,7 @@ import com.account.app.command.account.command.GetAccountDetailCommand;
 import com.account.app.command.account.command.ListAccountsCommand;
 import com.account.app.command.account.command.SoftDeleteAccountCommand;
 import com.account.app.command.account.mapper.AccountCommandMapper;
-import com.account.app.command.core.CommandBus;
+import com.account.app.command.CommandBus;
 import com.account.app.common.response.ApiResponse;
 import com.account.app.dto.request.account.CreateAccountRequest;
 import com.account.app.dto.request.account.EkycRequest;

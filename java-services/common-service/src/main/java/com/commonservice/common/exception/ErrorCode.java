@@ -1,0 +1,12 @@
+package com.commonservice.common.exception;
+
+public enum ErrorCode {
+    VALIDATION_ERROR,
+    RESOURCE_NOT_FOUND,
+    DUPLICATE_REQUEST,
+    RISK_REJECTED,
+    LEDGER_RESERVE_FAILED,
+    PAYMENT_PROCESSING_FAILED,
+    SETTLEMENT_FAILED,
+    INTERNAL_ERROR
+}

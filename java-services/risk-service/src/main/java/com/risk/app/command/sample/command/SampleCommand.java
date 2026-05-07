@@ -1,6 +1,6 @@
-package com.risk.app.command.sample.command;
+package com.risk.app.command;
 
-import com.risk.app.command.core.Command;
+import com.risk.app.command.Command;
 import com.risk.app.dto.response.SampleResponse;
 
 public class SampleCommand implements Command<SampleResponse> {

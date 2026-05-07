@@ -1,8 +1,8 @@
 package com.risk.app.config;
 
-import com.risk.app.command.core.CommandBus;
-import com.risk.app.command.core.CommandRegistry;
-import com.risk.app.command.core.SimpleCommandBus;
+import com.risk.app.command.CommandBus;
+import com.risk.app.command.CommandRegistry;
+import com.risk.app.command.SimpleCommandBus;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

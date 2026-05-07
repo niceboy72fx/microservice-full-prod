@@ -1,4 +1,4 @@
-package com.risk.app.dto.request;
+package com.risk.app.dto;
 
 public class SampleRequest {
 

@@ -1,4 +1,4 @@
-package com.settlement.app.dto.request;
+package com.settlement.app.dto;
 
 public class SampleRequest {
 

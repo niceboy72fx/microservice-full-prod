@@ -1,4 +1,4 @@
-package com.ledger.app.common.response;
+package com.ledger.app.common;
 
 public class ApiResponse<T> {
 

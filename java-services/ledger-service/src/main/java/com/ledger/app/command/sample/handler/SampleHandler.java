@@ -1,12 +1,12 @@
-package com.ledger.app.command.sample.handler;
+package com.ledger.app.command;
 
-import com.ledger.app.command.core.CommandHandler;
-import com.ledger.app.command.core.CommandRegistry;
+import com.ledger.app.command.CommandHandler;
+import com.ledger.app.command.CommandRegistry;
 import com.ledger.app.command.sample.command.SampleCommand;
-import com.ledger.app.domain.model.SampleModel;
-import com.ledger.app.domain.service.SampleDomainService;
+import com.ledger.app.bean.SampleModel;
+import com.ledger.app.service.SampleDomainService;
 import com.ledger.app.dto.response.SampleResponse;
-import com.ledger.app.repository.SampleRepository;
+import com.ledger.app.dao.SampleRepository;
 import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Component;
 

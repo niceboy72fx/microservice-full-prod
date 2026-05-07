@@ -1,6 +1,6 @@
 package com.settlement.app.controller;
 
-import com.settlement.app.command.core.CommandBus;
+import com.settlement.app.command.CommandBus;
 import com.settlement.app.command.sample.command.SampleCommand;
 import com.settlement.app.command.sample.mapper.SampleCommandMapper;
 import com.settlement.app.common.response.ApiResponse;

@@ -1,8 +1,8 @@
 package com.payment.app.config;
 
-import com.payment.app.command.core.CommandBus;
-import com.payment.app.command.core.CommandRegistry;
-import com.payment.app.command.core.SimpleCommandBus;
+import com.payment.app.command.CommandBus;
+import com.payment.app.command.CommandRegistry;
+import com.payment.app.command.SimpleCommandBus;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

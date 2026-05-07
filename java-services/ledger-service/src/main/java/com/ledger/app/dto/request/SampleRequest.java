@@ -1,4 +1,4 @@
-package com.ledger.app.dto.request;
+package com.ledger.app.dto;
 
 public class SampleRequest {
 

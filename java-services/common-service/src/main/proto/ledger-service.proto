@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package common.ledger.v1;
+
+option java_multiple_files = true;
+option java_package = "com.commonservice.common.grpc.ledger.v1";
+
+service LedgerService {
+  rpc ReserveBalance (ReserveBalanceRequest) returns (ReserveBalanceResponse);
+  rpc CaptureBalance (CaptureBalanceRequest) returns (CaptureBalanceResponse);
+}
+
+message ReserveBalanceRequest {
+  string payment_id = 1;
+  string account_id = 2;
+  string amount = 3;
+  string currency = 4;
+}
+
+message ReserveBalanceResponse {
+  bool success = 1;
+  string reservation_id = 2;
+  string message = 3;
+}
+
+message CaptureBalanceRequest {
+  string reservation_id = 1;
+}
+
+message CaptureBalanceResponse {
+  bool success = 1;
+  string message = 2;
+}

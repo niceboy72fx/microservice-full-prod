@@ -1,4 +1,4 @@
-package com.ledger.app.command.sample.mapper;
+package com.ledger.app.command;
 
 import com.ledger.app.command.sample.command.SampleCommand;
 import com.ledger.app.dto.request.SampleRequest;

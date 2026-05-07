@@ -1,8 +1,8 @@
 package com.acme.orders.service;
 
-import com.acme.orders.domain.Money;
-import com.acme.orders.domain.Order;
-import com.acme.orders.domain.OrderRepository;
+import com.acme.orders.service.example.app.bean.Money;
+import com.acme.orders.service.example.app.bean.Order;
+import com.acme.orders.service.example.app.bean.OrderRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;

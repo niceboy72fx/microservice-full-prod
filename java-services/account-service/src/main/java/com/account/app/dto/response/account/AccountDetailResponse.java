@@ -1,4 +1,4 @@
-package com.account.app.dto.response.account;
+package com.account.app.dto;
 
 public record AccountDetailResponse(
         String id,

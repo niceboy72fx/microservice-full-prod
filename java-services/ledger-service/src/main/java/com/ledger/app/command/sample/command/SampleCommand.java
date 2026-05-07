@@ -1,6 +1,6 @@
-package com.ledger.app.command.sample.command;
+package com.ledger.app.command;
 
-import com.ledger.app.command.core.Command;
+import com.ledger.app.command.Command;
 import com.ledger.app.dto.response.SampleResponse;
 
 public class SampleCommand implements Command<SampleResponse> {

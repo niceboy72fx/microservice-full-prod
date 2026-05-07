@@ -1,4 +1,4 @@
-package com.risk.app.integration.external;
+package com.risk.app.integration;
 
 import io.grpc.ManagedChannel;
 import org.springframework.stereotype.Component;

@@ -1,8 +1,8 @@
 package com.account.app.config;
 
-import com.account.app.command.core.CommandBus;
-import com.account.app.command.core.CommandRegistry;
-import com.account.app.command.core.SimpleCommandBus;
+import com.account.app.command.CommandBus;
+import com.account.app.command.CommandRegistry;
+import com.account.app.command.SimpleCommandBus;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

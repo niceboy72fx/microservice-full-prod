@@ -1,4 +1,4 @@
-package com.account.app.command.account.mapper;
+package com.account.app.command;
 
 import com.account.app.command.account.command.CreateAccountCommand;
 import com.account.app.command.account.command.EkycAccountCommand;

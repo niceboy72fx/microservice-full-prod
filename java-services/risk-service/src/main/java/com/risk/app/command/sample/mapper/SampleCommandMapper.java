@@ -1,4 +1,4 @@
-package com.risk.app.command.sample.mapper;
+package com.risk.app.command;
 
 import com.risk.app.command.sample.command.SampleCommand;
 import com.risk.app.dto.request.SampleRequest;

@@ -1,4 +1,4 @@
-package com.risk.app.dto.response;
+package com.risk.app.dto;
 
 public class SampleResponse {
 

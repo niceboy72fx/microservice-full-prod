@@ -1,12 +1,12 @@
-package com.account.app.command.sample.handler;
+package com.account.app.command;
 
-import com.account.app.command.core.CommandHandler;
-import com.account.app.command.core.CommandRegistry;
+import com.account.app.command.CommandHandler;
+import com.account.app.command.CommandRegistry;
 import com.account.app.command.sample.command.SampleCommand;
-import com.account.app.domain.model.SampleModel;
-import com.account.app.domain.service.SampleDomainService;
+import com.account.app.bean.SampleModel;
+import com.account.app.service.SampleDomainService;
 import com.account.app.dto.response.SampleResponse;
-import com.account.app.repository.SampleRepository;
+import com.account.app.dao.SampleRepository;
 import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Component;
 

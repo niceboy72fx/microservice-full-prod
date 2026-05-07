@@ -1,4 +1,4 @@
-package com.settlement.app.command.sample.mapper;
+package com.settlement.app.command;
 
 import com.settlement.app.command.sample.command.SampleCommand;
 import com.settlement.app.dto.request.SampleRequest;

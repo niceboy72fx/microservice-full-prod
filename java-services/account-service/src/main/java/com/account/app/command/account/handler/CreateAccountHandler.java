@@ -1,9 +1,9 @@
-package com.account.app.command.account.handler;
+package com.account.app.command;
 
 import com.account.app.command.account.command.CreateAccountCommand;
-import com.account.app.command.core.CommandHandler;
-import com.account.app.command.core.CommandRegistry;
-import com.account.app.domain.service.account.AccountDomainService;
+import com.account.app.command.CommandHandler;
+import com.account.app.command.CommandRegistry;
+import com.account.app.service.account.AccountDomainService;
 import com.account.app.dto.response.account.AccountDetailResponse;
 import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Component;

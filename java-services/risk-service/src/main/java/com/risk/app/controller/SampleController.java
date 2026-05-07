@@ -1,6 +1,6 @@
 package com.risk.app.controller;
 
-import com.risk.app.command.core.CommandBus;
+import com.risk.app.command.CommandBus;
 import com.risk.app.command.sample.command.SampleCommand;
 import com.risk.app.command.sample.mapper.SampleCommandMapper;
 import com.risk.app.common.response.ApiResponse;

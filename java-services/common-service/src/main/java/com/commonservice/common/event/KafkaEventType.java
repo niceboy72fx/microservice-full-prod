@@ -1,0 +1,13 @@
+package com.commonservice.common.event;
+
+public enum KafkaEventType {
+    PAYMENT_CREATED,
+    PAYMENT_SUCCESS,
+    PAYMENT_FAILED,
+    PAYMENT_UNKNOWN,
+    LEDGER_RESERVED,
+    LEDGER_CAPTURED,
+    WITHDRAW_REQUESTED,
+    WITHDRAW_COMPLETED,
+    NOTIFICATION_CREATED
+}

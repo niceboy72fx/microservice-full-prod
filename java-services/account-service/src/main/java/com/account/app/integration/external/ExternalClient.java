@@ -1,4 +1,4 @@
-package com.account.app.integration.external;
+package com.account.app.integration;
 
 import io.grpc.ManagedChannel;
 import org.springframework.stereotype.Component;

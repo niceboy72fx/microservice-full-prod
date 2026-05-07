@@ -1,6 +1,6 @@
-package com.reporting.app.command.sample.command;
+package com.reporting.app.command;
 
-import com.reporting.app.command.core.Command;
+import com.reporting.app.command.Command;
 import com.reporting.app.dto.response.SampleResponse;
 
 public class SampleCommand implements Command<SampleResponse> {

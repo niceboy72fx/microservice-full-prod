@@ -1,4 +1,4 @@
-package com.settlement.app.dto.response;
+package com.settlement.app.dto;
 
 public class SampleResponse {
 

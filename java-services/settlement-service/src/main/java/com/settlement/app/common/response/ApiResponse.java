@@ -1,4 +1,4 @@
-package com.settlement.app.common.response;
+package com.settlement.app.common;
 
 public class ApiResponse<T> {
 

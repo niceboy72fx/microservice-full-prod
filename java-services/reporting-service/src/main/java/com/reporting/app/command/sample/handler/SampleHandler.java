@@ -1,12 +1,12 @@
-package com.reporting.app.command.sample.handler;
+package com.reporting.app.command;
 
-import com.reporting.app.command.core.CommandHandler;
-import com.reporting.app.command.core.CommandRegistry;
+import com.reporting.app.command.CommandHandler;
+import com.reporting.app.command.CommandRegistry;
 import com.reporting.app.command.sample.command.SampleCommand;
-import com.reporting.app.domain.model.SampleModel;
-import com.reporting.app.domain.service.SampleDomainService;
+import com.reporting.app.bean.SampleModel;
+import com.reporting.app.service.SampleDomainService;
 import com.reporting.app.dto.response.SampleResponse;
-import com.reporting.app.repository.SampleRepository;
+import com.reporting.app.dao.SampleRepository;
 import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Component;
 

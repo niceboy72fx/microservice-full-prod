@@ -1,4 +1,4 @@
-package com.settlement.app.common.exception;
+package com.settlement.app.common;
 
 import com.settlement.app.common.response.ApiResponse;
 import org.springframework.http.HttpStatus;

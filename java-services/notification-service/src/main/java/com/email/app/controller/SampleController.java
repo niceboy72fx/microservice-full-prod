@@ -1,8 +1,8 @@
 package com.email.app.controller;
 
-import com.email.app.command.core.CommandBus;
-import com.email.app.command.sample.command.SampleCommand;
-import com.email.app.command.sample.mapper.SampleCommandMapper;
+import com.email.app.command.CommandBus;
+import com.email.app.command.SampleCommand;
+import com.email.app.service.SampleCommandMapper;
 import com.email.app.common.response.ApiResponse;
 import com.email.app.dto.request.SampleRequest;
 import com.email.app.dto.response.SampleResponse;

@@ -1,4 +1,4 @@
-package com.ledger.app.common.exception;
+package com.ledger.app.common;
 
 public class BusinessException extends RuntimeException {
 

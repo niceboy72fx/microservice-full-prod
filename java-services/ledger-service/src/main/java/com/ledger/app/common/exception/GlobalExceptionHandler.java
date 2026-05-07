@@ -1,4 +1,4 @@
-package com.ledger.app.common.exception;
+package com.ledger.app.common;
 
 import com.ledger.app.common.response.ApiResponse;
 import org.springframework.http.HttpStatus;

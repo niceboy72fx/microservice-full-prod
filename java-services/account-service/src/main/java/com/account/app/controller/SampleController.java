@@ -1,6 +1,6 @@
 package com.account.app.controller;
 
-import com.account.app.command.core.CommandBus;
+import com.account.app.command.CommandBus;
 import com.account.app.command.sample.command.SampleCommand;
 import com.account.app.command.sample.mapper.SampleCommandMapper;
 import com.account.app.common.response.ApiResponse;

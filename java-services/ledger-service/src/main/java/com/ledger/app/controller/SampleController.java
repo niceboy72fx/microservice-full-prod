@@ -1,6 +1,6 @@
 package com.ledger.app.controller;
 
-import com.ledger.app.command.core.CommandBus;
+import com.ledger.app.command.CommandBus;
 import com.ledger.app.command.sample.command.SampleCommand;
 import com.ledger.app.command.sample.mapper.SampleCommandMapper;
 import com.ledger.app.common.response.ApiResponse;

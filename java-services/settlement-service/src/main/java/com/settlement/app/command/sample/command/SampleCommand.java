@@ -1,6 +1,6 @@
-package com.settlement.app.command.sample.command;
+package com.settlement.app.command;
 
-import com.settlement.app.command.core.Command;
+import com.settlement.app.command.Command;
 import com.settlement.app.dto.response.SampleResponse;
 
 public class SampleCommand implements Command<SampleResponse> {

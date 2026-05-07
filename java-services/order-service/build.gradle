@@ -18,7 +18,7 @@ dependencies {
     implementation 'io.quarkus:quarkus-messaging-kafka'
     implementation 'io.quarkus:quarkus-logging-json'
     
-    implementation 'com.commonservice.common:common-service:0.0.1-SNAPSHOT'
+    implementation project(':common-service')
     implementation 'io.quarkus:quarkus-resteasy-reactive-jackson'
     
     // Hibernate ORM with Panache

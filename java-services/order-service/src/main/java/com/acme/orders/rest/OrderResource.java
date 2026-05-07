@@ -1,6 +1,6 @@
 package com.acme.orders.rest;
 
-import com.acme.orders.domain.Order;
+import com.acme.orders.service.example.app.bean.Order;
 import com.acme.orders.service.OrderService;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;

@@ -1,4 +1,4 @@
-package com.reporting.app.dto.request;
+package com.reporting.app.dto;
 
 public class SampleRequest {
 

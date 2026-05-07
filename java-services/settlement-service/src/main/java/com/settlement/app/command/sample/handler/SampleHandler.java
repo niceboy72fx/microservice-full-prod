@@ -1,12 +1,12 @@
-package com.settlement.app.command.sample.handler;
+package com.settlement.app.command;
 
-import com.settlement.app.command.core.CommandHandler;
-import com.settlement.app.command.core.CommandRegistry;
+import com.settlement.app.command.CommandHandler;
+import com.settlement.app.command.CommandRegistry;
 import com.settlement.app.command.sample.command.SampleCommand;
-import com.settlement.app.domain.model.SampleModel;
-import com.settlement.app.domain.service.SampleDomainService;
+import com.settlement.app.bean.SampleModel;
+import com.settlement.app.service.SampleDomainService;
 import com.settlement.app.dto.response.SampleResponse;
-import com.settlement.app.repository.SampleRepository;
+import com.settlement.app.dao.SampleRepository;
 import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Component;
 

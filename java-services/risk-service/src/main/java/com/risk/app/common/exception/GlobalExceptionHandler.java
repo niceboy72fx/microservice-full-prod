@@ -1,4 +1,4 @@
-package com.risk.app.common.exception;
+package com.risk.app.common;
 
 import com.risk.app.common.response.ApiResponse;
 import org.springframework.http.HttpStatus;

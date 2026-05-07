@@ -1,4 +1,4 @@
-package com.reporting.app.command.sample.mapper;
+package com.reporting.app.command;
 
 import com.reporting.app.command.sample.command.SampleCommand;
 import com.reporting.app.dto.request.SampleRequest;

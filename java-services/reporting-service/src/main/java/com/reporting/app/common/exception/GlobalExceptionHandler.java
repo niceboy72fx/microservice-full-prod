@@ -1,4 +1,4 @@
-package com.reporting.app.common.exception;
+package com.reporting.app.common;
 
 import com.reporting.app.common.response.ApiResponse;
 import org.springframework.http.HttpStatus;

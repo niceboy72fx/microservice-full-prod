@@ -1,4 +1,4 @@
-package com.account.app.dto.response;
+package com.account.app.dto;
 
 public class SampleResponse {
 
